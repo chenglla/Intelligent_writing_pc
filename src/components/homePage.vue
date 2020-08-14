@@ -79,7 +79,7 @@
           </div>
         </el-footer>
       </el-container>
-      <!-- 登录弹框 -->
+     <!-- 登录弹框
       <el-dialog  :visible.sync="showDialog" width="30%">
         <el-form  :model="loginForm" class="login-form" auto-complete="on" label-position="left">
           <el-form-item>
@@ -143,7 +143,7 @@
           </el-form-item>
           <el-button type="primary" style="width:100%;margin-bottom:30px;" @click="register">注册</el-button>
         </el-form>
-      </el-dialog>
+      </el-dialog> -->
     </div>
 </template>
 
