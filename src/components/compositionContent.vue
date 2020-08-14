@@ -39,10 +39,17 @@
         </el-row>
       </el-header>
       <el-main>
-        <el-container>
-          <el-main width="70%;">
+        <el-container style="padding-right: 50px;">
+          <el-main  >
             <el-card class="box-card"  shadow="never" style="width: 100%;height: 650px">
-              <el-button type="primary" icon="el-icon-upload" size="small" style="margin-bottom: 20px" @click="uploadimg">图片上传</el-button>
+              <el-button class="uploadImg" type="primary" size="small"  @click="uploadimg">
+                <i class="iconfont icontupianshangchuan"></i>
+                图片上传
+              </el-button>
+              <el-button class="onMeasure" type="primary" @click="beginMeasure">
+                <i class="iconfont iconzhinengceping-"></i>
+                <span >点击进行智能评测</span>
+              </el-button>
               <el-dialog
                 title="提示：请按照先带有标题页，再是作文页的顺序进行上传"
                 :visible.sync="dialogVisible1"
@@ -64,13 +71,13 @@
                 </el-dialog>
                 <span slot="footer" class="dialog-footer">
                   <el-button @click="dialogVisible1 = false">取 消</el-button>
-                  <el-button type="primary"  @click="subimg">确 定</el-button>
+                  <el-button type="primary"  @click="subimg" style="background-color: #0000FF;">确 定</el-button>
                 </span>
               </el-dialog>
               <el-row>
                 <el-col :span="2">
                   <div style="padding-top: 8px">
-                    <span style="font-weight: bolder">作文标题</span>
+                    <span style="font-weight: bolder">标题</span>
                   </div>
                 </el-col>
                 <el-col :span="22">
@@ -78,99 +85,46 @@
                     type="textarea"
                     rows="1"
                     placeholder="请输入作文标题"
-                    v-model="textarea1">
+                    v-model="textarea1"
+                    style="margin-bottom: 30px;">
                   </el-input>
                 </el-col>
               </el-row>
-              <el-divider></el-divider>
+              <!-- <el-divider></el-divider> -->
               <el-row>
                 <el-col :span="2">
                   <div style="padding-top: 8px">
-                    <span style="font-weight: bolder">作文内容</span>
+                    <span style="font-weight: bolder">正文</span>
                   </div>
                 </el-col>
                 <el-col :span="22">
+                  <!-- <mavon-editor style="height: 80vh;" v-model="value"/> -->
                   <el-input
                     type="textarea"
-                    rows="18"
+                    rows="23"
                     placeholder="请输入作文内容"
                     v-model="textarea2">
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row>
-                <div class="button_container">
-                  <el-button type="primary" round @click="beginMeasure">点击进行智能评测</el-button>
-                </div>
-              </el-row>
+
             </el-card>
           </el-main>
-          <el-aside width="30%">
-            <div style="padding-top: 20px">
-              <el-card class="box-card"  shadow="never" >
-                <el-row>
-                  <span style="font-weight: bolder">推荐模板</span>
-                </el-row>
-                <el-divider></el-divider>
-                <!--<div>-->
-                  <!--<span style="font-size: 25px">模板分类</span>-->
-                <!--</div>-->
-                <div style="text-align: center;margin-top: 10px">
-                  <el-link v-for="(item, index) in TypeList1" :key="index" style="margin-right: 10px;font-weight: bolder;font-size: 16px" :type="colorList[index]" @click="Type2(item, index)">{{item}}</el-link>
-                </div>
-                <div>
-                  <el-tag v-for="(item, index) in TypeList2" :key="index" :type="tag_type" @click="Content_Type(item)" class="type2">{{item}}</el-tag>
-
-                  <!--<el-card class="box-card" style="width: 100%;height: 120px" @click.native="gotoContent(item)">-->
-                    <!--<el-row>-->
-                      <!--<el-col :span="8">-->
-                        <!--<img src="http://114.242.223.253/zihui/images/20190703c001.jpg" class="image" style="width: 80px;height: 80px">-->
-                      <!--</el-col>-->
-                      <!--<el-col :span="16">-->
-                        <!--<el-row>-->
-                          <!--<span>{{item.title}}</span>-->
-                        <!--</el-row>-->
-                        <!--<el-row>-->
-                          <!--<el-col :span="12">-->
-                            <!--<div class="one_row">-->
-                              <!--<div class="biaoqian">-->
-                                <!--<i class="el-icon-time"></i>-->
-                              <!--</div>-->
-                              <!--<div class="composition_title">-->
-                                <!--<span style="font-size: 10px;font-weight: bolder">{{item.year}}</span>-->
-                              <!--</div>-->
-                            <!--</div>-->
-                          <!--</el-col>-->
-                          <!--<el-col :span="12">-->
-                            <!--<div class="one_row">-->
-                              <!--<div class="biaoqian">-->
-                                <!--<i class="el-icon-view"></i>-->
-                              <!--</div>-->
-                              <!--<div class="composition_title">-->
-                                <!--<span style="font-size: 10px;font-weight: bolder">201</span>-->
-                              <!--</div>-->
-                            <!--</div>-->
-                          <!--</el-col>-->
-                        <!--</el-row>-->
-                      <!--</el-col>-->
-                    <!--</el-row>-->
-                  <!--</el-card>-->
-                </div>
-                <div style="margin-top: 20px;height: 500px">
-                  <el-scrollbar style="height: 100%" class="scrollbar">
-                    <el-card style="width: 98%;margin-top: 10px" v-for="(item, index) in content" :key="index">
-                      <div slot="header" class="clearfix">
-                        <span>{{item.title}}</span>
-                      </div>
-                      <div>
-                        <p :class="isactive === index ? 'addclass' : 'line-limit-length' " style="white-space: pre-wrap;">{{item.content}}</p>
-                        <i class="el-icon-more-outline" @click="expend_text(index)" v-if="showicon || isactive !== index"></i>
-                        <i class="el-icon-arrow-up" @click="show_switch" v-if="!showicon && isactive === index"></i>
-                      </div>
-                    </el-card>
-                  </el-scrollbar>
-                </div>
-              </el-card>
+          <el-aside width="15%" class="asidePart">
+            <div class="model_picture" >
+              <div class="piture-title" >作文模板</div>
+              <div>
+                <img class="backPicture" src="../assets/image/作文模板无.png" alt="" >
+              </div>
+              <div>
+                <img class="backPicture" src="../assets/image/作文模板3.png" alt="">
+              </div>
+              <div>
+                <img class="backPicture" src="../assets/image/作文模板2.png" alt="">
+              </div>
+              <div>
+                <img class="backPicture" src="../assets/image/作文模板1.png" alt="">
+              </div>
             </div>
           </el-aside>
         </el-container>
@@ -248,7 +202,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">关闭</el-button>
         <el-button type="primary" @click="gotoPage">查看评测结果</el-button>
-  </span>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -485,7 +439,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style  scoped>
   .logo_container{
     padding-top: 20px;
   }
@@ -557,5 +511,51 @@ export default {
   }
   .scrollbar >>> .el-scrollbar__wrap {
     overflow-x: hidden;
+  }
+  /deep/ .el-card__body {
+    background-color: #F5F5F5;
+    border: 0;
+  }
+  .uploadImg{ /* 图片上传按钮 */
+    margin-left: 90px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right ,#FE7655,#FF9972);
+  }
+  .onMeasure{/* 点击开始测试按钮 */
+    color: black;
+  }
+  .asidePart{ /* 侧边部分 */
+  }
+  .model_picture{ /* 侧边外框 */
+    position: relative;
+    top: 100px;
+    background-color: green;
+    background-color: white;
+    border: 1px solid #CCCCCC;
+    text-align: center;
+    padding-bottom: 30px;
+  }
+  .piture-title{ /* "作文模板" */
+    width: 100%;
+    padding-top: 4px;
+    height: 30px;
+    background-color: #FF9972;
+    text-align: center;
+    /* font-weight: bolder; */
+    font-size: 16px;
+    color: white;
+  }
+  .backPicture{ /* 每张图片 */
+    margin-top: 30px;
+    width: 120px;
+    height: 70px;
+  }
+  .el-button--primary {
+    background-color: rgb(249,249,249);
+    border: 1px solid #DDDDDD;
+    /* color: #000000; */
+  }
+  .el-card {/* 去除默认边框 */
+    border: 0;
   }
 </style>

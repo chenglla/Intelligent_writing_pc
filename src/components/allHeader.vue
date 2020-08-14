@@ -14,8 +14,8 @@
               :src=logo></el-image>
           </div>
         </el-col>
-        <el-col :span="6" :offset="3">
-          <div class="card-one">
+        <el-col :span="6" :offset="2" >
+          <div class="card-one" >
             <el-card shadow="never" style="height: 80px;width: 100%;border: unset;">
               <el-input placeholder="请输入关键字" v-model="input3" class="input-with-select">
                 <el-select v-model="select" slot="prepend" placeholder="请选择" style="width: 110px" @change="selectchange" value="">
@@ -37,7 +37,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="3">
           <div class="tubiao-contianer">
             <div class="tubiao">
               <i class="el-icon-s-custom"></i>
@@ -51,14 +51,109 @@
         </el-col>
       </el-row>
     </el-header>
+    <!-- 登录弹框 -->
+    <el-dialog  :visible.sync="showDialog" width="30%" custom-class="loginUp-dialog">
+      <el-form  :model="loginForm"  class="loginUp" auto-complete="on" label-position="left">
+        <el-form-item >
+          <el-input
+            v-model="loginForm.user_name"
+            placeholder="请输入您的用户名"
+            name="user_name"
+            type="text"
+            auto-complete="on"
+            >
+            <template slot="prepend" class="login-icon">
+              <i class="iconfont iconyonghu"  style="color: white;"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="loginForm.password"
+            placeholder="请输入您的密码"
+            name="password"
+            show-password
+            auto-complete="on"
+            >
+            <template slot="prepend" class="login-icon">
+              <i class="iconfont iconsuo"  style="color: white;"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item >
+          <el-input
+            v-model="vcode"
+            placeholder="请输入右侧验证码"
+            name="Num"
+            style="width: 65%;"
+            auto-complete="on"
+            ></el-input>
+            <div class="ccode" @click="handleCode">{{ccode}}</div>
+        </el-form-item >
+        <el-form-item >
+          <el-radio-group >
+            <el-radio label="记住用户名" v-model="rememberName"></el-radio>
+            <el-radio label="自动登录" v-model="autoLogin"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-button type="primary" class="login-button"  @click="login">登录</el-button>
+      </el-form>
+    </el-dialog>
+    <!--注册弹框-->
+    <el-dialog  :visible.sync="showDialogTwo" width="30%">
+      <el-form  :model="loginForm" class="login-form" auto-complete="on" label-position="left">
+        <el-form-item>
+          <el-input
+            v-model="registerForm.user_name"
+            placeholder="请输入用户名"
+            name="user_name"
+            type="text"
+            auto-complete="on"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="registerForm.school_name"
+            placeholder="请输入学校名称"
+            name="user_name"
+            type="text"
+            auto-complete="on"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-select v-model="gradeValue" placeholder="请选择年级" @change="showGrade">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="registerForm.password"
+            placeholder="请输入密码"
+            name="password"
+            show-password
+            auto-complete="on"/>
+        </el-form-item>
+        <el-button type="primary" style="width:100%;margin-bottom:30px;" @click="register">注册</el-button>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
+import {login} from '@/api/login'
+import {register} from '@/api/register'
 import logo from '@/assets/image/logo.png'
 import userPopover from '@/components/user/userPopover'
 import {getfindByTitle2, getResearchListData} from '@/api/getCompositionData'
 // import Bus from '@/utils/eventBus'
 export default {
+
+
   name: 'allHeader',
   inject: ['reload'],
   components: {userPopover},
@@ -73,7 +168,48 @@ export default {
       researchFlag: false,
       compositionData: [], // 搜索到的所有数据
       // total: 0, // 搜索到的数据数量
+      rememberName:'',//记住用户名
+      autoLogin:false,//自动登录
+      vcode:'',//用户输入的验证码
+      ccode:'',//验证码
+      options: [{
+        value: 'chuyi',
+        label: '初一'
+      }, {
+        value: 'chuer',
+        label: '初二'
+      }, {
+        value: 'chusan',
+        label: '初三'
+      }, {
+        value: 'gaoyi',
+        label: '高一'
+      }, {
+        value: 'gaoer',
+        label: '高二'
+      }, {
+        value: 'gaosan',
+        label: '高三'
+      }],
+      loginFlag: '否',
+      loginForm: {
+        user_name: '',
+        password: ''
+      },
+      registerForm: {
+        user_name: '',
+        password: '',
+        school_name: ''
+      },
+      username: localStorage.username,
     }
+  },
+  mounted() {
+    if (localStorage.getItem('username') === 'null') {
+      localStorage.clear()
+    }
+    this.generatedCode()//加载验证码
+    this.judgeFlag()
   },
   methods: {
     selectchange () { // 选择框选择改变
@@ -108,6 +244,119 @@ export default {
       }
       // let routeData = this.$router.resolve({ path: '/compositionContent' })
       // window.open(routeData.href, '_blank')
+    },
+    judgeFlag: function () {
+      if (localStorage.username === '' || localStorage.username === undefined) {
+        this.loginFlag = '否'
+      } else {
+        this.loginFlag = '是'
+      }
+      console.log('我调用完方法了')
+    },
+    register: function () {
+      if (this.registerForm.user_name === '' || this.registerForm.password === '') {
+        this.$message({
+          message: '密码或用户名不能为空',
+          type: 'warning'
+        })
+      } else {
+        // console.log('注册成功')
+        const prams = {
+          name: this.registerForm.user_name,
+          password: this.registerForm.password,
+          schoolname: this.registerForm.school_name,
+          nianji: this.gradeValue
+        }
+        register(prams).then(response => {
+          console.log('测试注册数据')
+          console.log(response.data)
+          this.$message({
+            message: '恭喜你，注册成功 请登录',
+            type: 'success'
+          })
+        })
+        this.showDialogTwo = false
+      }
+    },
+    getData: function () {
+      const prams = {
+        page: 1
+      }
+      getCompositionListData(prams).then(respone => {
+        this.fatherData = respone.data.data.list
+        console.log('输出测试111')
+        console.log(this.fatherData)
+      })
+    },
+    login: function () {
+      // if(this.rememberName == true){}
+      // if(){}
+      // this.loginFlag = '是'
+      // // alert('登录成功')
+      // this.showDialog = false
+
+      const prams = {
+        username: this.loginForm.user_name,
+        password: this.loginForm.password
+      }
+      login(prams).then(respone => {
+        localStorage.clear()
+        if (respone.data.code === 0) {
+          localStorage.setItem('username', respone.data.data)
+          this.$message({
+            message: '登录成功',
+            type: 'success',
+            duration: 5000
+          })
+          this.loginFlag = '是'
+          // alert('登录成功')
+          this.showDialog = false
+          this.username = localStorage.username
+          const prams = {
+            page: 1,
+            user: this.username
+          }
+          getCompositionListData(prams).then(respone => {
+            this.fatherData = respone.data.data
+            console.log('输出要传给子组件显示的作文数据')
+            console.log(this.fatherData)
+            this.$refs.child.handleCurrentChange(1)
+            this.reload()
+          })
+        } else {
+          this.$message.error('用户名或密码错误！')
+        }
+      })
+    },
+    // 点击生成验证码
+    handleCode () {
+      this.generatedCode()
+    },
+    // 生成验证码
+    generatedCode () {
+      const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+      let code = ''
+      for (let i = 0; i < 4; i++) {
+        let index = Math.floor(Math.random() * 36)
+        code += random[index]
+      }
+      this.ccode = code
+    },
+    // 判断验证码是否输入准确
+    checkCode () {
+      let vcode = this.loginInfo.vcode
+      vcode = vcode.toUpperCase()
+      let ccode = this.ccode
+      ccode = ccode.toUpperCase()
+      if (vcode !== ccode) {
+        this.$message.error('Please enter the correct verification code!')
+        this.$set(this.loginInfo, 'vcode', '')
+        this.$set(this.loginInfo, 'password', '')
+      } else {
+        this.login()
+        // return 1
+      }
     },
   }
 }
@@ -177,6 +426,22 @@ export default {
     top: 80px;
     /*border-bottom: 1px solid #ececec;*/
   }
+  .ccode{ /* 验证码 */
+    display: inline-block;
+    border: 1px solid #E1E1E1;
+    width: 25%;
+    margin-left: 10px;
+    text-align:center;
+    border-radius: 4px;
+    color: #0061E4;
+    font-weight: 600;
+    background-color: white;
+  }
+  .login-button{
+    width:100%;
+    margin-bottom:30px;
+    background-color: #FF7533;border: 0;
+  }
 </style>
 <style>
   .el-input-group__append, .el-input-group__prepend {
@@ -191,4 +456,11 @@ export default {
   .el-input-group .el-input__inner {
     border: 1px solid #ee7f60;
   }
+  .loginUp-dialog{ /* 弹框 */
+    background-color: #FAF9FE;
+  }
+
+  /* .el-input-group__prepend{
+    background-color: #FE7756;
+  } */
 </style>
