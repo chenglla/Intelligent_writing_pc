@@ -82,7 +82,7 @@
                 </el-col>
                 <el-col :span="22">
                   <el-input
-                    type="textarea"
+                    type="text"
                     rows="1"
                     placeholder="请输入作文标题"
                     v-model="textarea1"
@@ -99,11 +99,24 @@
                 </el-col>
                 <el-col :span="22">
                   <!-- <mavon-editor style="height: 80vh;" v-model="value"/> -->
+                  <!-- <textarea
+                    type="textarea"
+                    rows="23"
+                    placeholder="请输入作文内容"
+                    v-model="textarea2"
+                    class="textArea2"
+                    >
+                  </textarea> -->
+                  <!-- <div id="textArea2" >
+                    
+                  </div> -->
                   <el-input
                     type="textarea"
                     rows="23"
                     placeholder="请输入作文内容"
-                    v-model="textarea2">
+                    v-model="textarea2"
+                    id="textArea2"
+                    >
                   </el-input>
                 </el-col>
               </el-row>
@@ -114,16 +127,16 @@
             <div class="model_picture" >
               <div class="piture-title" >作文模板</div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板无.png" alt="" >
+                <img class="backPicture" src="../assets/image/作文模板无.png" alt="" @click="changeBackground(0)">
               </div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板3.png" alt="">
+                <img class="backPicture" src="../assets/image/作文模板1.png" alt="" @click="changeBackground(1)">
               </div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板2.png" alt="">
+                <img class="backPicture" src="../assets/image/作文模板2.png" alt="" @click="changeBackground(2)">
               </div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板1.png" alt="">
+                <img class="backPicture" src="../assets/image/作文模板3.png" alt="" @click="changeBackground(3)">
               </div>
             </div>
           </el-aside>
@@ -214,6 +227,9 @@ export default {
   name: 'compositionContent',
   data () {
     return {
+      // backgroundImg:[{
+      //   url1:'../assets/image/作文模板无.png'
+      // },],
       dialogVisible: false,
       username: localStorage.getItem('username'),
       logo: logo,
@@ -434,7 +450,11 @@ export default {
     show_switch () {
       this.showicon = true
       this.isactive = -1
-    }
+    },
+    changeBackground(i){//修改背景图片
+
+      document.getElementById("textArea2").style.backgroundImage='url(../assets/image/作文模板2.png)';
+    },
   }
 }
 </script>
@@ -550,6 +570,10 @@ export default {
     width: 120px;
     height: 70px;
   }
+  .backPicture:hover{
+    border: 1px solid #FF9972;
+    border-radius: 4px;
+  }
   .el-button--primary {
     background-color: rgb(249,249,249);
     border: 1px solid #DDDDDD;
@@ -557,5 +581,14 @@ export default {
   }
   .el-card {/* 去除默认边框 */
     border: 0;
+  }
+</style>
+<style>
+  .el-textarea__inner {
+    background-image: url(../assets/image/作文模板3.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border-radius: 30px;
+    padding: 20px 30px;
   }
 </style>

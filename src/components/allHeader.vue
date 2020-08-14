@@ -45,7 +45,7 @@
             <div class="title">
               <span v-if="loginFlag==='否'" style="color: dimgrey;cursor: pointer" @click="showLogin">登录</span>
               <span v-if="loginFlag==='否'" style="color: dimgrey;cursor: pointer" @click="beginRegistered">注册</span>
-              <user-popover v-else></user-popover>
+              <user-popover v-else ></user-popover>
             </div>
           </div>
         </el-col>
@@ -91,12 +91,14 @@
             <div class="ccode" @click="handleCode">{{ccode}}</div>
         </el-form-item >
         <el-form-item >
-          <el-radio-group >
-            <el-radio label="记住用户名" v-model="rememberName"></el-radio>
-            <el-radio label="自动登录" v-model="autoLogin"></el-radio>
-          </el-radio-group>
+          <template>
+            <el-checkbox-group v-model="checkList">
+              <el-checkbox v-model="rememberName" label="1">记住用户名</el-checkbox>
+              <el-checkbox v-model="autoLogin" label="2">自动登录</el-checkbox>
+            </el-checkbox-group>
+          </template>
         </el-form-item>
-        <el-button type="primary" class="login-button"  @click="login">登录</el-button>
+        <el-button type="primary" class="login-button"  @click="checkCode">登录</el-button>
       </el-form>
     </el-dialog>
     <!--注册弹框-->
@@ -159,6 +161,8 @@ export default {
   components: {userPopover},
   data () {
     return {
+      checkList:[],
+      gradeValue: '',//选中的年级
       select: '普通检索',
       input3: '',
       logo: logo,
@@ -168,7 +172,7 @@ export default {
       researchFlag: false,
       compositionData: [], // 搜索到的所有数据
       // total: 0, // 搜索到的数据数量
-      rememberName:'',//记住用户名
+      rememberName:false,//记住用户名
       autoLogin:false,//自动登录
       vcode:'',//用户输入的验证码
       ccode:'',//验证码
@@ -205,26 +209,27 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.getItem('username') === 'null') {
-      localStorage.clear()
-    }
+    // if (localStorage.getItem('username') === 'null') {
+    //   localStorage.clear()
+    // }
     this.generatedCode()//加载验证码
     this.judgeFlag()
   },
   methods: {
+    closeMain(val){
+      this.loginFlag = '否';
+    },
+    showGrade: function () {
+      console.log('我变了')
+      console.log(this.gradeValue)
+    },
     selectchange () { // 选择框选择改变
       console.log(this.select)
     },
     research: function () {
       this.$emit('selectWord', this.input3)
     },
-    showLogin: function () {
-      // this.loginFlag = '是'
-      this.showDialog = true
-      console.log('daozheyibumei :')
-      this.$emit('login', this.showDialog)
-      // alert('登录成功')
-    },
+
     beginRegistered: function () {
       console.log('开始注册')
       this.showDialogTwo = true
@@ -288,7 +293,21 @@ export default {
         console.log(this.fatherData)
       })
     },
+    showLogin: function () {
+      console.log("登录",localStorage.getItem("REM_NAME"))
+      if(localStorage.getItem("REM_NAME") == "true"){
+        this.login()
+      }else{
+        // this.loginFlag = '是'
+        this.showDialog = true
+        console.log('daozheyibumei :')
+        this.$emit('login', this.showDialog)
+        // alert('登录成功')
+      }
+
+    },
     login: function () {
+      console.log("login")
       // if(this.rememberName == true){}
       // if(){}
       // this.loginFlag = '是'
@@ -345,18 +364,29 @@ export default {
     },
     // 判断验证码是否输入准确
     checkCode () {
-      let vcode = this.loginInfo.vcode
-      vcode = vcode.toUpperCase()
-      let ccode = this.ccode
-      ccode = ccode.toUpperCase()
-      if (vcode !== ccode) {
-        this.$message.error('Please enter the correct verification code!')
-        this.$set(this.loginInfo, 'vcode', '')
-        this.$set(this.loginInfo, 'password', '')
-      } else {
-        this.login()
-        // return 1
+      console.log("记住用户名",this.checkList)
+      console.log("自动登录",this.autoLogin)
+      if(this.checkList.indexOf(2)){
+        console.log("if成功了")
+        localStorage.setItem("REM_NAME",'true')
+        console.log("REM_NAME",localStorage.getItem("REM_NAME"))
       }
+        console.log("checkCode")
+        let vcode = this.vcode
+        vcode = vcode.toUpperCase() //不区分大小写
+        let ccode = this.ccode
+        ccode = ccode.toUpperCase()
+        if (vcode !== ccode) {
+          this.$message.error('Please enter the correct verification code!')
+          this.generatedCode()
+          // this.$set(this.loginInfo, 'vcode', '')
+          // this.$set(this.loginInfo, 'password', '')
+        } else {
+          this.login()
+          // return 1
+        }
+
+
     },
   }
 }
