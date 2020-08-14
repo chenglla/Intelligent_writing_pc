@@ -61,8 +61,9 @@
             name="user_name"
             type="text"
             auto-complete="on"
+            class="login_input"
             >
-            <template slot="prepend" class="login-icon">
+            <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
               <i class="iconfont iconyonghu"  style="color: white;"></i>
             </template>
           </el-input>
@@ -74,6 +75,7 @@
             name="password"
             show-password
             auto-complete="on"
+            class="login_input"
             >
             <template slot="prepend" class="login-icon">
               <i class="iconfont iconsuo"  style="color: white;"></i>
@@ -152,8 +154,6 @@ import userPopover from '@/components/user/userPopover'
 import {getfindByTitle2, getResearchListData} from '@/api/getCompositionData'
 // import Bus from '@/utils/eventBus'
 export default {
-
-
   name: 'allHeader',
   inject: ['reload'],
   components: {userPopover},
@@ -168,10 +168,10 @@ export default {
       researchFlag: false,
       compositionData: [], // 搜索到的所有数据
       // total: 0, // 搜索到的数据数量
-      rememberName:'',//记住用户名
-      autoLogin:false,//自动登录
-      vcode:'',//用户输入的验证码
-      ccode:'',//验证码
+      rememberName: '', // 记住用户名
+      autoLogin: false, // 自动登录
+      vcode: '', // 用户输入的验证码
+      ccode: '', // 验证码
       options: [{
         value: 'chuyi',
         label: '初一'
@@ -191,7 +191,7 @@ export default {
         value: 'gaosan',
         label: '高三'
       }],
-      loginFlag: '否',
+      // loginFlag: '否',
       loginForm: {
         user_name: '',
         password: ''
@@ -204,11 +204,11 @@ export default {
       username: localStorage.username,
     }
   },
-  mounted() {
+  mounted () {
     if (localStorage.getItem('username') === 'null') {
       localStorage.clear()
     }
-    this.generatedCode()//加载验证码
+    this.generatedCode() // 加载验证码
     this.judgeFlag()
   },
   methods: {
@@ -441,9 +441,22 @@ export default {
     width:100%;
     margin-bottom:30px;
     background-color: #FF7533;border: 0;
+    font-size: 20px;
+    letter-spacing: 0.3em;
+  }
+  .login_input .iconfont {
+    font-size: 22px;
   }
 </style>
 <style>
+  .login_input .el-input-group__prepend {
+    background-color: #ee7f60;
+    padding: 0 15px;
+    /*border: 1px solid #ececec;*/
+  }
+  .el-form-item__content .login_input .el-input__inner {
+    border: 1px solid #ececec;
+  }
   .el-input-group__append, .el-input-group__prepend {
     color: #ee7f60;
     background-color: #fff;
@@ -457,7 +470,8 @@ export default {
     border: 1px solid #ee7f60;
   }
   .loginUp-dialog{ /* 弹框 */
-    background-color: #FAF9FE;
+    background-color: #fff;
+    /*background-color: #FAF9FE;*/
   }
 
   /* .el-input-group__prepend{
