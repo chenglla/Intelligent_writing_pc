@@ -14,7 +14,7 @@
         <i class="iconfont iconfengefuhao"></i>
         <div style="font-size: 22px;letter-spacing: 0.1em;display: inline-block">{{currentType}}</div>
       </el-col>
-      <el-col :span="3" :offset="17">
+      <el-col :span="4" :offset="16">
         <span class="type_right" @click="gotoOption('trans')">
           <i class="iconfont iconhuanyipi"></i>
           换一批

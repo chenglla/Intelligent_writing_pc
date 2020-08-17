@@ -14,7 +14,7 @@
               :src=logo></el-image>
           </div>
         </el-col>
-        <el-col :span="6" :offset="2" >
+        <el-col :span="8" :offset="0" >
           <div class="card-one" >
             <el-card shadow="never" style="height: 80px;width: 100%;border: unset;">
               <el-input placeholder="请输入关键字" v-model="input3" class="input-with-select">
@@ -37,15 +37,22 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="3" >
           <div class="tubiao-contianer">
-            <div class="tubiao">
-              <i class="el-icon-s-custom"></i>
-            </div>
             <div class="title">
-              <span v-if="loginFlag==='否'" style="color: dimgrey;cursor: pointer" @click="showLogin">登录</span>
-              <span v-if="loginFlag==='否'" style="color: dimgrey;cursor: pointer" @click="beginRegistered">注册</span>
-              <user-popover v-else></user-popover>
+              <div v-if="loginFlag==='true'">
+                <div class="tubiao">
+                  <img class="userImg" src="../assets/image/头像.png" alt="">
+                </div>
+                <user-popover  style="display: inline-block;"></user-popover>
+              </div>
+              <div v-else>
+                <div class="tubiao">
+                  <i class="el-icon-s-custom"></i>
+                </div>
+                <span  style="color: dimgrey;cursor: pointer" @click="showLogin">登录</span>
+                <span  style="color: dimgrey;cursor: pointer" @click="beginRegistered">注册</span>
+              </div>
             </div>
           </div>
         </el-col>
@@ -92,13 +99,26 @@
             ></el-input>
             <div class="ccode" @click="handleCode">{{ccode}}</div>
         </el-form-item >
+
         <el-form-item >
-          <el-radio-group >
-            <el-radio label="记住用户名" v-model="rememberName"></el-radio>
-            <el-radio label="自动登录" v-model="autoLogin"></el-radio>
-          </el-radio-group>
+          <template>
+            <!-- <span>
+              <input type="checkBox" v-model="rememberName"  @click="changeRem" />
+               <label for="adviceCheck" class="advice">记住用户名</label>
+            </span>
+            <span>
+              <input type="checkBox" v-model="autoLogin" :checked="autoLogin" @click="!autoLogin" />
+               <label for="adviceCheck" class="advice">自动登录</label>
+            </span> -->
+            <el-checkbox-group v-model="rememberName" style="display: inline-block;">
+              <el-checkbox  label="1" checked="rememberName">记住用户名</el-checkbox>
+            </el-checkbox-group>
+            <el-checkbox-group v-model="autoLogin" style="display: inline-block;margin-left: 10px;">
+              <el-checkbox  label="2" >自动登录</el-checkbox>
+            </el-checkbox-group>
+          </template>
         </el-form-item>
-        <el-button type="primary" class="login-button"  @click="login">登录</el-button>
+        <el-button type="primary" class="login-button"  @click="checkCode">登录</el-button>
       </el-form>
     </el-dialog>
     <!--注册弹框-->
@@ -147,6 +167,7 @@
   </div>
 </template>
 <script>
+import {setCookie,getCookie,clearCookie} from '../utils/user.js'
 import {login} from '@/api/login'
 import {register} from '@/api/register'
 import logo from '@/assets/image/logo.png'
@@ -159,19 +180,29 @@ export default {
   components: {userPopover},
   data () {
     return {
+      //checkList:[],
+      //rememberName:false,
+      gradeValue: '',//选中的年级
       select: '普通检索',
       input3: '',
       logo: logo,
       showDialogTwo: false,
       showDialog: false,
-      loginFlag: '否',
+      loginFlag: false,
       researchFlag: false,
       compositionData: [], // 搜索到的所有数据
       // total: 0, // 搜索到的数据数量
-      rememberName: '', // 记住用户名
+
+      // rememberName:false,//记住用户名
+      // autoLogin:false,//自动登录
+      // vcode:'',//用户输入的验证码
+      // ccode:'',//验证码
+
+      rememberName: false, // 记住用户名
       autoLogin: false, // 自动登录
       vcode: '', // 用户输入的验证码
       ccode: '', // 验证码
+
       options: [{
         value: 'chuyi',
         label: '初一'
@@ -204,35 +235,43 @@ export default {
       username: localStorage.username,
     }
   },
-  mounted () {
-    if (localStorage.getItem('username') === 'null') {
-      localStorage.clear()
-    }
-    this.generatedCode() // 加载验证码
+
+  mounted() {
+    // getCookie()
+    // if (localStorage.getItem('username') === 'null') {
+    //   localStorage.clear()
+    // }
+    this.generatedCode()//加载验证码
     this.judgeFlag()
+    this.clearLogin()//判断用户登录状态
   },
   methods: {
+    changeRem(){ // 记住密码多选框选中状态
+      this.rememberName = !this.rememberName
+    },
+    clearLogin(){ //更换登录状态
+      console.log("页面刷新后，登录状态",localStorage.getItem("LOGINFLAG"))
+      this.loginFlag = localStorage.getItem("LOGINFLAG")
+    },
+    showGrade: function () {
+      //console.log('我变了')
+      //console.log(this.gradeValue)
+    },
     selectchange () { // 选择框选择改变
-      console.log(this.select)
+      //console.log(this.select)
     },
     research: function () {
       this.$emit('selectWord', this.input3)
     },
-    showLogin: function () {
-      // this.loginFlag = '是'
-      this.showDialog = true
-      console.log('daozheyibumei :')
-      this.$emit('login', this.showDialog)
-      // alert('登录成功')
-    },
+
     beginRegistered: function () {
-      console.log('开始注册')
+      //console.log('开始注册')
       this.showDialogTwo = true
       this.$emit('register', this.showDialogTwo)
     },
     goCompositionContent: function () {
-      console.log('初次加载username')
-      console.log(this.username)
+      //console.log('初次加载username')
+      //console.log(this.username)
       if (this.username === '' || this.username === undefined) {
         this.$message({
           message: '您未登录，无法使用智能测评功能',
@@ -246,10 +285,12 @@ export default {
       // window.open(routeData.href, '_blank')
     },
     judgeFlag: function () {
-      if (localStorage.username === '' || localStorage.username === undefined) {
-        this.loginFlag = '否'
+      if (!(localStorage.username === '' || localStorage.username === undefined)) {
+        console.log("无用户信息")
+        this.loginFlag = 'true'
       } else {
-        this.loginFlag = '是'
+        console.log("用户信息已存在")
+        this.loginFlag = false
       }
       console.log('我调用完方法了')
     },
@@ -288,7 +329,43 @@ export default {
         console.log(this.fatherData)
       })
     },
+    showLogin: function () {
+      console.log("弹框之前")
+      console.log("USERNAME",localStorage.getItem("USERNAME"))
+      console.log("PASSWORD",localStorage.getItem("PASSWORD"))
+      console.log("AUTO_LOGIN",localStorage.getItem("AUTO_LOGIN"))
+      //localStorage.setItem("AUTO_LOGIN",false)//自动登录
+      if(localStorage.getItem("AUTO_LOGIN") == 'true'){
+        this.login()
+      }else{
+        //console.log("自动登录",localStorage.getItem("AUTO_LOGIN"))
+        console.log("REM_NAME",localStorage.getItem("REM_NAME"))
+        if(localStorage.getItem("REM_NAME")==="false"){//如果未记录用户名则清空缓存
+          console.log("统统清空")
+          localStorage.setItem("REM_NAME",false)
+          localStorage.setItem("USERNAME",'')
+          localStorage.setItem("PASSWORD",'')
+        }
+        //console.log("USERNAME2",localStorage.getItem("USERNAME"))
+        //console.log("PASSWORD2",localStorage.getItem("PASSWORD"))
+        this.loginForm.user_name = localStorage.getItem("USERNAME")
+        this.loginForm.password = localStorage.getItem("PASSWORD")
+        this.rememberName = localStorage.getItem("REM_NAME")
+        // this.loginForm.user_name = "tpp"
+        // this.loginForm.password = 'xgg'
+        //console.log("自动登录的本地存储",localStorage.getItem("AUTO_LOGIN"))
+
+        // this.loginFlag = '是'
+        this.showDialog = true // 登录弹框
+        //console.log('daozheyibumei :')
+        this.$emit('login', this.showDialog)
+        // alert('登录成功')
+      }
+
+    },
     login: function () {
+      console.log("login")
+      console.log(this.loginForm.user_name)
       // if(this.rememberName == true){}
       // if(){}
       // this.loginFlag = '是'
@@ -296,19 +373,21 @@ export default {
       // this.showDialog = false
 
       const prams = {
-        username: this.loginForm.user_name,
-        password: this.loginForm.password
+        username: localStorage.getItem("USERNAME"),
+        password: localStorage.getItem("PASSWORD")
       }
       login(prams).then(respone => {
-        localStorage.clear()
+        //localStorage.clear()
         if (respone.data.code === 0) {
           localStorage.setItem('username', respone.data.data)
+          //console.log("username",localStorage.getItem('username'))
           this.$message({
             message: '登录成功',
             type: 'success',
             duration: 5000
           })
-          this.loginFlag = '是'
+          this.loginFlag = 'true'
+          localStorage.setItem("LOGINFLAG",true)
           // alert('登录成功')
           this.showDialog = false
           this.username = localStorage.username
@@ -318,8 +397,8 @@ export default {
           }
           getCompositionListData(prams).then(respone => {
             this.fatherData = respone.data.data
-            console.log('输出要传给子组件显示的作文数据')
-            console.log(this.fatherData)
+            //console.log('输出要传给子组件显示的作文数据')
+            //console.log(this.fatherData)
             this.$refs.child.handleCurrentChange(1)
             this.reload()
           })
@@ -345,18 +424,45 @@ export default {
     },
     // 判断验证码是否输入准确
     checkCode () {
-      let vcode = this.loginInfo.vcode
-      vcode = vcode.toUpperCase()
-      let ccode = this.ccode
-      ccode = ccode.toUpperCase()
-      if (vcode !== ccode) {
-        this.$message.error('Please enter the correct verification code!')
-        this.$set(this.loginInfo, 'vcode', '')
-        this.$set(this.loginInfo, 'password', '')
-      } else {
-        this.login()
-        // return 1
+      //保存的账号
+        // let name=this.loginForm.username;
+        // //保存的密码
+        // let pass=this.loginForm.password;
+        // //判断复选框是否被勾选 勾选则调用配置cookie方法
+        // if(this.autoLogin == true){
+        //   //传入账号名，密码，和保存天数3个参数
+        //   setCookie(name,pass,7);
+        // }else{
+        //   clearCookie()
+        // }
+
+      //console.log("this.autoLogin",this.autoLogin)
+      localStorage.setItem('USERNAME',this.loginForm.user_name)
+      localStorage.setItem('PASSWORD',this.loginForm.password)
+      localStorage.setItem('REM_NAME',this.rememberName)
+      //console.log("USERNAME",localStorage.getItem("USERNAME"))
+      //console.log("PASSWORD",localStorage.getItem("PASSWORD"))
+      console.log("存入REM_NAME",localStorage.getItem("REM_NAME"))
+      if(this.autoLogin==true){//自动登录，AUTO_LOGIN为真
+        localStorage.setItem("AUTO_LOGIN",'true')
+        //console.log("自动存储存入本地",localStorage.getItem("AUTO_LOGIN"))
       }
+        //console.log("checkCode") //校验验证码
+        let vcode = this.vcode
+        vcode = vcode.toUpperCase() //不区分大小写
+        let ccode = this.ccode
+        ccode = ccode.toUpperCase()
+        if (vcode !== ccode) {
+          this.$message.error('Please enter the correct verification code!')
+          this.generatedCode()
+          // this.$set(this.loginInfo, 'vcode', '')
+          // this.$set(this.loginInfo, 'password', '')
+        } else {
+          this.login()
+          // return 1
+        }
+        this.generatedCode()
+
     },
   }
 }
@@ -386,6 +492,10 @@ export default {
   .tubiao{
     display: inline-block;
     vertical-align: middle;
+  }
+  .userImg{
+    width: 30px;
+    height: 30px;
   }
   .title{
     display: inline-block;
@@ -449,6 +559,9 @@ export default {
   }
 </style>
 <style>
+  .el-header {
+    padding: 0 0  0 20px;
+  }
   .login_input .el-input-group__prepend {
     background-color: #ee7f60;
     padding: 0 15px;
@@ -473,7 +586,9 @@ export default {
     background-color: #fff;
     /*background-color: #FAF9FE;*/
   }
-
+  /* .el-card__body {
+    padding: 20px 0;
+  } */
   /* .el-input-group__prepend{
     background-color: #FE7756;
   } */
