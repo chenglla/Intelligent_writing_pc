@@ -105,18 +105,22 @@ export default {
       }
     },
     lastPage () {
-      this.page -= 2
-      if (this.selectWord === '') {
-        if (this.page >= 2) {
-          this.getCurrentData()
-          this.getCurrentRightData()
-        }
-      } else {
-        if (this.page >= 2) {
-          this.getSelectContent(this.selectWord)
-          this.getSelectRContent(this.selectWord)
+      if(this.page>0){
+        this.page -= 2
+        console.log("当前页",this.page)
+        if (this.selectWord === '') {
+          if (this.page >= 2) {
+            this.getCurrentData()
+            this.getCurrentRightData()
+          }
+        } else {
+          if (this.page >= 2) {
+            this.getSelectContent(this.selectWord)
+            this.getSelectRContent(this.selectWord)
+          }
         }
       }
+      //this.page = 0
     },
     getSelectData (word) { // 获取搜索数据
       this.dataTypeList = []

@@ -1,5 +1,8 @@
 <template>
   <div class="article-body">
+    <div class="logo_info">
+      <img src="../assets/image/logo.png" alt="">
+    </div>
     <div class="article">
       <el-scrollbar style="height: 100%">
         <h1>{{ListData.title}}</h1>
@@ -7,7 +10,7 @@
           <a>{{ListData.type}}</a>
         </div>
         <p v-html="StrData" style="text-indent: 2em">
-          {{StrData}}
+<!--          {{StrData}}-->
         </p>
         <div class="txtdate">
           <span>{{ListData.date}}</span>
@@ -57,19 +60,30 @@ export default {
 <style scoped>
   .article-body{
     text-align: center;
-    background: url("../assets/image/article-bg.png");
+    background: url("../assets/image/book_back.png") no-repeat;
     background-size: 100% 100%;
-    height: 100%;
+    position: relative;
+    /*background-size: 100% 100%;*/
+    /*height: 100%;*/
     top:0;
     left: 0;
     overflow-y: auto;
     /*overflow-x: auto;*/
   }
+  .logo_info {
+    position: absolute;
+    width: 250px;
+    top: 2%;
+    left: 5%;
+  }
+  .logo_info img {
+    width: 100%;
+  }
   .article{
     margin: 150px auto;
     width: 680px;
     /*height: 1000px;*/
-    border: 1px solid rgb(100, 100, 100);
+    /*border: 1px solid rgb(100, 100, 100);*/
     background: rgb(248, 225, 204);
   }
   .article h1{

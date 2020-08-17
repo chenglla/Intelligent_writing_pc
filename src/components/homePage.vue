@@ -188,7 +188,7 @@ export default {
       logo: logo,
       showDialogTwo: false,
       showDialog: false,
-      loginFlag: '否',
+      loginFlag: false,
       loginForm: {
         user_name: '',
         password: ''
@@ -353,7 +353,7 @@ export default {
             type: 'success',
             duration: 5000
           })
-          this.loginFlag = '是'
+          this.loginFlag = true
           // alert('登录成功')
           this.showDialog = false
           this.username = localStorage.username
@@ -390,9 +390,9 @@ export default {
     },
     judgeFlag: function () {
       if (localStorage.username === '' || localStorage.username === undefined) {
-        this.loginFlag = '否'
+        this.loginFlag = false
       } else {
-        this.loginFlag = '是'
+        this.loginFlag = true
       }
       console.log('我调用完方法了')
     },

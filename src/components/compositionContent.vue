@@ -108,16 +108,18 @@
                     >
                   </textarea> -->
                   <!-- <div id="textArea2" >
-                    
+
                   </div> -->
-                  <el-input
-                    type="textarea"
-                    rows="23"
-                    placeholder="请输入作文内容"
-                    v-model="textarea2"
-                    id="textArea2"
-                    >
-                  </el-input>
+                  <div class="zhengwen" id="zhengwen">
+                    <el-input
+                      type="textarea"
+                      rows="23"
+                      placeholder="请输入作文内容"
+                      v-model="textarea2"
+                      id="textArea2"
+                      >
+                    </el-input>
+                  </div>
                 </el-col>
               </el-row>
 
@@ -451,10 +453,19 @@ export default {
       this.showicon = true
       this.isactive = -1
     },
-    changeBackground(i){//修改背景图片
-
-      document.getElementById("textArea2").style.backgroundImage='url(../assets/image/作文模板2.png)';
+    changeBackground(val){
+      if(val == 0){
+        document.getElementById("zhengwen").style.backgroundImage='none';
+      }else{
+        var transImag = document.querySelector('.zhengwen')
+        var currentImage = require('../assets/image/作文模板'+val+'.png')
+        transImag.style.backgroundImage = 'url('+currentImage+')'
+      }
     },
+    // changeBackground(i){//修改背景图片
+
+    //   document.getElementById("zhengwen").style.backgroundImage='url(../assets/image/作文模板2.png)';
+    // },
   }
 }
 </script>
@@ -582,13 +593,25 @@ export default {
   .el-card {/* 去除默认边框 */
     border: 0;
   }
-</style>
-<style>
-  .el-textarea__inner {
-    background-image: url(../assets/image/作文模板3.png);
+  .zhengwen{
+    background-color: white;
+    /* background-image: none; */
     background-size: 100% 100%;
     background-repeat: no-repeat;
     border-radius: 30px;
     padding: 20px 30px;
+  }
+</style>
+<style>
+  .zhengwen .el-textarea .el-textarea__inner {
+    background-color: unset;
+    border: none;
+    font-size: 18px;
+    letter-spacing: 2px;
+    /* background-image: url(../assets/image/作文模板3.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border-radius: 30px;
+    padding: 20px 30px; */
   }
 </style>

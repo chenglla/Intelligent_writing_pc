@@ -31,7 +31,11 @@
           </div>
           <div class="functionTitle">
             <el-button type="text" @click="logout">退出登录</el-button>
+
           </div>
+        </div>
+        <div  class="functionTitle">
+          <el-button type="text" @click="cancelLogin" class="cancel-login">取消自动登录</el-button>
         </div>
       </div>
       <span slot="reference">我的</span>
@@ -87,6 +91,10 @@ export default {
     }
   },
   methods: {
+    cancelLogin(){
+      localStorage.setItem("AUTO_LOGIN",false)
+      console.log("取消自动登录",localStorage.getItem("AUTO_LOGIN"))
+    },
     handleClose: function () {
       console.log()
     },
@@ -96,7 +104,8 @@ export default {
     },
     logout: function () {
       console.log('退出登录')
-      localStorage.clear()
+      //localStorage.clear()
+      localStorage.setItem("LOGINFLAG",false)
       this.$message({
         message: '退出登录',
         type: 'success',
@@ -182,6 +191,11 @@ export default {
   .function_item{
     float: left;
     display: inline-block;
+  }
+  .cancel-login{/* 取消登录按钮 */
+    margin-left: 40px;
+    font-size: 10px;
+    color: dimgrey;
   }
   .functionLogo{
     float: left;
