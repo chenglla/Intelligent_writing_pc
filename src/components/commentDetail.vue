@@ -38,8 +38,8 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-main>
-        <el-container>
+      <el-main class="detailMain">
+        <el-container class="commentDetail">
           <el-main width="70%;">
             <el-card style="min-height: 900px">
               <div style="padding: 40px;margin: 0 auto">
@@ -47,7 +47,7 @@
                   <span>{{title}}</span>
                 </h1>
                 <div class="tag">
-                  <el-tag type="info">{{tag}}</el-tag>
+                  <el-tag type="info" >{{tag}}</el-tag>
                 </div>
                 <div style="padding-left: 40px; padding-right: 40px;margin: 0 auto">
                   <p class="content" v-html="content">{{content}}</p>
@@ -55,7 +55,7 @@
               </div>
             </el-card>
           </el-main>
-          <el-aside width="30%" style="padding-top:20px">
+          <el-aside width="30%" style="padding-top:20px;">
             <el-card style="min-height: 300px" >
               <!--<div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%)">-->
                 <!--<div class="score">-->
@@ -64,19 +64,33 @@
                   <!--</div>-->
                 <!--</div>-->
               <!--</div>-->
-              <div style="padding: 40px">
-                <div style="margin-bottom: 20px">
-                  <span style="font-weight: bold">我的得分：</span>
-                  <span style="color: red">{{tags[4]}}</span>
+              <div style="padding: 10px">
+                <div style="margin-bottom: 20px;display: inline-block;">
+                  <i class="iconfont icon-jiangbei" ></i>
+                  <div style="display: inline-block;">
+                    <div style="color: red;font-size: 20px;">{{tags[4]}}</div>
+                    <div style="font-size: 10px;">我的得分</div>
+                  </div>
                 </div>
-                <div style="margin-bottom: 20px">
-                  <span style="font-weight: bold">标签：</span>
+                <div class='artType'>
+                  <!-- <span style="font-weight: bold">标签：</span> -->
                   <span>{{tag}}</span>
                 </div>
-                <div style="margin-bottom: 20px">
+                <!-- <HR/> -->
+                <el-tabs stretch @tab-click="handleClick">
+                    <el-tab-pane  label="注释" name="first">
+                      <span style="font-weight: bold">注释：</span>
+                      <span>{{tags[5]}}</span>
+                    </el-tab-pane>
+                    <el-tab-pane  label="评语" name="second">
+                      <span style="font-weight: bold">评语：</span>
+                      <span>{{tags[5]}}</span>
+                    </el-tab-pane>
+                  </el-tabs>
+                <!-- <div style="margin-bottom: 20px">
                   <span style="font-weight: bold">评语：</span>
                   <span>{{tags[5]}}</span>
-                </div>
+                </div> -->
               </div>
             </el-card>
             <el-card style="min-height: 580px;margin-top: 20px">
@@ -129,16 +143,27 @@ export default {
     this.getData()
   },
   methods: {
+    //标签页点击更换页面
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
     getData () {
       const prames = {
-        title: this.title,
-        passage: this.passage,
-        user: this.user
+        // title: this.title,
+        // passage: this.passage,
+        // user: this.user
+        title: null,
+        passage: null,
+        user: null
+
       }
       intelligentMeasurement2(prames).then((res) => {
         this.content = res.data.data.content
         this.tag = res.data.data.tags[1]
         this.tags = res.data.data.tags
+        //截取成绩，保留小数点后两位
+        this.tags[4] = this.tags[4].toFixed(2)
+        //console.log('4',this.tags[4])
         this.parallel = res.data.data.parallel
         this.fullscreenLoading = false
       })
@@ -148,6 +173,17 @@ export default {
 </script>
 
 <style scoped>
+  .icon-jiangbei{
+    font-size: 40px;
+    color: orange;
+  }
+  /* 中间部分 */
+  .detailMain{
+    padding: 20px 50px;
+  }
+  .el-main{
+    background-color: rgb(249,205,173)!important;
+  }
   .logo_container{
     padding-top: 20px;
   }
@@ -167,6 +203,16 @@ export default {
   }
   .el-main{
     background-color: #F5F5F5;
+  }
+  .artType{
+    color: white;
+    font-weight: blod;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    float: right;
+    background: linear-gradient(to right ,#FE7655,#FF9972);
+    padding: 4px 16px;
   }
   .copyrightContainer{
     padding-top: 20px;
@@ -258,4 +304,10 @@ export default {
     top: -8px;
     left: -8px;
   }
+  /* .el-card__body div{
+    padding: 40px 6px !important;
+  } */
+</style>
+<style>
+
 </style>

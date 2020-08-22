@@ -43,6 +43,7 @@
           <el-main  >
             <el-card class="box-card"  shadow="never" style="width: 100%;height: 650px">
               <el-button class="uploadImg" type="primary" size="small"  @click="uploadimg">
+              <!-- <el-button class="uploadImg" type="primary" size="small"  @click="gotocommentDetail"> -->
                 <i class="iconfont icontupianshangchuan"></i>
                 图片上传
               </el-button>
@@ -53,7 +54,7 @@
               <el-dialog
                 title="提示：请按照先带有标题页，再是作文页的顺序进行上传"
                 :visible.sync="dialogVisible1"
-                width="50%">
+                width="40%">
                 <el-upload
                   action="http://114.242.223.253/zihui/essay/fileUpload"
                   list-type="picture-card"
@@ -63,15 +64,16 @@
                   :on-remove="handleRemove"
                   :on-success="handleSuccess"
                   :on-error="handleError"
+
                 >
-                  <i class="el-icon-plus"></i>
+                  <i class="iconfont icontupianshangchuan"></i>
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible2" append-to-body>
                   <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
                 <span slot="footer" class="dialog-footer">
-                  <el-button @click="dialogVisible1 = false">取 消</el-button>
-                  <el-button type="primary"  @click="subimg" style="background-color: #0000FF;">确 定</el-button>
+                  <!-- <el-button @click="dialogVisible1 = false">取 消</el-button> -->
+                  <el-button class="pictureUpload" type="primary"  @click="subimg" >确 定</el-button>
                 </span>
               </el-dialog>
               <el-row>
@@ -98,7 +100,9 @@
                   </div>
                 </el-col>
                 <el-col :span="22">
-                  <!-- <mavon-editor style="height: 80vh;" v-model="value"/> -->
+                  <div id="zhengwen">
+                    <mavon-editor  style="height: 100vh;" v-model="textarea2" />
+                  </div>
                   <!-- <textarea
                     type="textarea"
                     rows="23"
@@ -107,10 +111,7 @@
                     class="textArea2"
                     >
                   </textarea> -->
-                  <!-- <div id="textArea2" >
-
-                  </div> -->
-                  <div class="zhengwen" id="zhengwen">
+                  <!-- <div class="zhengwen" id="zhengwen">
                     <el-input
                       type="textarea"
                       rows="23"
@@ -119,7 +120,7 @@
                       id="textArea2"
                       >
                     </el-input>
-                  </div>
+                  </div> -->
                 </el-col>
               </el-row>
 
@@ -150,66 +151,6 @@
         </div>
       </el-footer>
     </el-container>
-    <!--<el-dialog-->
-      <!--title="智能评测结果"-->
-      <!--:visible.sync="dialogVisible"-->
-      <!--width="30%">-->
-      <!--<div class="dialogContent">-->
-        <!--<el-row>-->
-          <!--<el-col :span="4">-->
-            <!--<span style="font-weight: bolder">我的得分: </span>-->
-          <!--</el-col>-->
-          <!--<el-col :span="8">-->
-            <!--<span>{{dialogData[5]}}</span>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row style="padding-top: 10px">-->
-          <!--<el-col :span="4">-->
-            <!--<span style="font-weight: bolder">标签: </span>-->
-          <!--</el-col>-->
-          <!--<el-col :span="8">-->
-            <!--<span>{{dialogData[1]}}</span>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row style="padding-top: 10px">-->
-          <!--<el-col :span="4">-->
-            <!--<span style="font-weight: bolder">题材: </span>-->
-          <!--</el-col>-->
-          <!--<el-col :span="8">-->
-            <!--<span>{{dialogData[2]}}</span>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row style="padding-top: 10px">-->
-          <!--<el-col :span="4">-->
-          <!--<span style="font-weight: bolder">引用次数: </span>-->
-        <!--</el-col>-->
-          <!--<el-col :span="8">-->
-            <!--<span>{{dialogData[3]}}</span>-->
-          <!--</el-col>-->
-          <!--<el-col :span="4">-->
-            <!--<span style="font-weight: bolder">排比次数: </span>-->
-          <!--</el-col>-->
-          <!--<el-col :span="8">-->
-            <!--<span>{{dialogData[4]}}</span>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row style="padding-top: 10px">-->
-          <!--<el-col :span="4">-->
-            <!--<span style="font-weight: bolder">建议: </span>-->
-          <!--</el-col>-->
-          <!--<el-col :span="20">-->
-            <!--<span>{{dialogData[6]}}</span>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row style="padding-top: 30px">-->
-          <!--<span style="font-weight: bolder">可前往推荐模板处阅读更多模板</span>-->
-        <!--</el-row>-->
-      <!--</div>-->
-      <!--<span slot="footer" class="dialog-footer">-->
-    <!--<el-button @click="dialogVisible = false">取 消</el-button>-->
-    <!--<el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
-  <!--</span>-->
-    <!--</el-dialog>-->
     <el-dialog
       title="智能评测结果"
       :visible.sync="dialogVisible"
@@ -223,10 +164,15 @@
 </template>
 
 <script>
+import {mavonEditor} from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import {intelligentMeasurement2, getfindByTitle3, getType1, getType2, getContent} from '@/api/getCompositionData'
 import logo from '@/assets/image/logo.png'
 export default {
   name: 'compositionContent',
+  components:{
+    mavonEditor,
+  },
   data () {
     return {
       // backgroundImg:[{
@@ -264,6 +210,11 @@ export default {
     this.getType()
   },
   methods: {
+    gotocommentDetail(){
+      this.$router.push({ path: '/commentDetail'
+      })
+
+    },
     startEvaluation: function () {
       this.dialogVisible = true
     },
@@ -555,6 +506,13 @@ export default {
   .onMeasure{/* 点击开始测试按钮 */
     color: black;
   }
+  .el-upload .icontupianshangchuan{/* 提交图片弹窗的图标 */
+    font-size: 100px;
+  }
+  .pictureUpload{/* 提交图片弹窗的按钮 */
+    width: 50%;
+    background: linear-gradient(to right ,#FE7655,#FF9972);
+  }
   .asidePart{ /* 侧边部分 */
   }
   .model_picture{ /* 侧边外框 */
@@ -613,5 +571,24 @@ export default {
     background-repeat: no-repeat;
     border-radius: 30px;
     padding: 20px 30px; */
+  }
+  .el-dialog{
+    background: rgb(250,249,254);
+
+  }
+  .el-dialog__footer ,.el-dialog__body{
+    text-align: center;
+  }
+
+  .el-upload--picture-card {
+    background-color: white;
+    border-color: rgb(246,114,10);
+
+    width: 80%;
+    text-align: center;
+  }
+  /* 预览部分的背景 */
+  .v-show-content{
+    background-image: url(../assets/image/banner4.png) !important;
   }
 </style>

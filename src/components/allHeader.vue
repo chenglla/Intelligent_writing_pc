@@ -131,7 +131,25 @@
             name="user_name"
             type="text"
             auto-complete="on"
-          />
+            class="login_input"
+          >
+            <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
+              <i class="iconfont iconyonghu"  style="color: white;"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="registerForm.password"
+            placeholder="请输入密码"
+            name="password"
+            show-password
+            auto-complete="on"
+            class="login_input">
+            <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
+              <i class="iconfont iconsuo"  style="color: white;"></i>
+            </template>
+          </el-input>
         </el-form-item>
         <el-form-item>
           <el-input
@@ -140,8 +158,14 @@
             name="user_name"
             type="text"
             auto-complete="on"
-          />
+            class="login_input"
+          >
+            <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
+              <i class="iconfont iconxuexiao"  style="color: white;"></i>
+            </template>
+          </el-input>
         </el-form-item>
+
         <el-form-item>
           <el-select v-model="gradeValue" placeholder="请选择年级" @change="showGrade">
             <el-option
@@ -153,15 +177,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-input
-            v-model="registerForm.password"
-            placeholder="请输入密码"
-            name="password"
-            show-password
-            auto-complete="on"/>
-        </el-form-item>
-        <el-button type="primary" style="width:100%;margin-bottom:30px;" @click="register">注册</el-button>
+        <el-button type="primary" class="login-button"  @click="register">注册</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -272,7 +288,8 @@ export default {
     goCompositionContent: function () {
       //console.log('初次加载username')
       //console.log(this.username)
-      if (this.username === '' || this.username === undefined) {
+      // if (this.username === '' || this.username === undefined) {
+      if (this.loginFlag != 'true') {
         this.$message({
           message: '您未登录，无法使用智能测评功能',
           type: 'warning'
@@ -285,14 +302,14 @@ export default {
       // window.open(routeData.href, '_blank')
     },
     judgeFlag: function () {
-      if (!(localStorage.username === '' || localStorage.username === undefined)) {
-        console.log("无用户信息")
-        this.loginFlag = 'true'
-      } else {
-        console.log("用户信息已存在")
-        this.loginFlag = false
-      }
-      console.log('我调用完方法了')
+      // if (!(localStorage.username === '' || localStorage.username === undefined)) {
+      //   console.log("无用户信息")
+      //   this.loginFlag = 'true'
+      // } else {
+      //   console.log("用户信息已存在")
+      //   this.loginFlag = false
+      // }
+      // console.log('我调用完方法了')
     },
     register: function () {
       if (this.registerForm.user_name === '' || this.registerForm.password === '') {
@@ -526,6 +543,14 @@ export default {
     opacity: 0.75;
     line-height: 300px;
     margin: 0;
+  }
+  .el_header_style{
+
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    background-color: white;
+
   }
   .el_header_style:after {
     content: '';
