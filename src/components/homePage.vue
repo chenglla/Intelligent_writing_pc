@@ -4,7 +4,7 @@
       <el-container style="width: 100%">
 <!--        <el-header class="el_header_style" height="80px">-->
 <!--          <all-header @login="showLogin" @register="beginRegistered"></all-header>-->
-          <all-header @login="showLogin" @register="beginRegistered" @selectWord="getSelectData"></all-header>
+          <all-header @login="showLogin" @register="beginRegistered" @selectWord="getSelectData" ></all-header>
 <!--          <el-row>-->
 <!--            <el-col :span="5">-->
 <!--              <div class="pictureContainer">-->
@@ -57,7 +57,7 @@
 <!--            </el-col>-->
 <!--          </el-row>-->
 <!--        </el-header>-->
-        <el-main>
+        <el-main class="home-main">
           <el-carousel :interval="4000" type="card" height="350px">
             <el-carousel-item v-for="item in imgList" :key="item">
               <img :src="item" alt="">
@@ -451,6 +451,11 @@ export default {
 </script>
 
 <style scoped>
+  .home-main{
+    margin-top: 80px;
+    /* position: relative;
+    top: 80px; */
+  }
   .logo_container{
     padding-top: 20px;
   }

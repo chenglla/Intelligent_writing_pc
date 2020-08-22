@@ -250,7 +250,7 @@ export default {
           id: item.id
         }
       })
-      console.log(item)
+      console.log("id",item)
     },
     like: function (item) {
       console.log(this.username)
@@ -371,7 +371,8 @@ export default {
     border-radius: 8px;
     cursor:pointer;
   }
-  .type_list .type_item {
+  /* 一个作文item */
+  .type_list .type_item { 
     background-color: #fff;
     margin: 10px 5px 5px 5px;
     flex: 18%;
@@ -383,7 +384,7 @@ export default {
     overflow: hidden;
     text-align: center;
     /*margin-top: 25px;*/
-    padding: 10px 0;
+    /* padding: 10px 0; */
     border-bottom: 1px solid #ececec;
   }
 </style>

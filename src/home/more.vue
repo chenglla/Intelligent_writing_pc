@@ -9,12 +9,12 @@
       <div class="more_second_content">
         <div class="second_left second_book">
           <div v-for="(item, index) in dataTypeList" :key="index" class="content_item">
-            <span>{{(10 * page) + index + 1}}.</span>   <span :title="item.localessay.title">{{item.localessay.title}}</span>
+            <span>{{(10 * page) + index + 1}}.</span>   <span :title="item.localessay.title" @click="gotoPage(item.localessay)">{{item.localessay.title}}</span>
           </div>
         </div>
         <div class="second_right second_book">
           <div v-for="(item, index) in dataTypeRList" :key="index" class="content_item">
-            <span>{{(10 * (page + 1)) + index + 1}}.</span>   <span :title="item.localessay.title">{{item.localessay.title}}</span>
+            <span>{{(10 * (page + 1)) + index + 1}}.</span>   <span :title="item.localessay.title" @click="gotoPage(item.localessay)">{{item.localessay.title}}</span>
           </div>
         </div>
       </div>
@@ -50,6 +50,16 @@ export default {
     this.getCurrentRightData()
   },
   methods: {
+    gotoPage(item){
+      console.log('点击没：')
+      this.$router.push({
+        path: '/compositiondetails',
+        query: {
+          id: item.id
+        }
+      })
+      console.log("文章id",item)
+    },
     getCurrentData () {
       if (this.currentType === '全部') {
         const prams = {
@@ -59,7 +69,7 @@ export default {
         getCompositionListData(prams).then(respone => {
           this.dataTypeList = respone.data.data.list
           this.total = respone.data.data.total
-          // console.log(this.fatherArray, this.total)
+          //console.log("aaa",respone.data)
         })
       } else {
         const prams = {
