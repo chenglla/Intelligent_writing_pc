@@ -101,7 +101,7 @@
                 </el-col>
                 <el-col :span="22">
                   <div id="zhengwen">
-                    <mavon-editor  style="height: 100vh;" v-model="textarea2" />
+                    <mavon-editor  style="height: 500px;" v-model="textarea2" />
                   </div>
                   <!-- <textarea
                     type="textarea"
@@ -157,7 +157,7 @@
       width="30%">
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">关闭</el-button>
-        <el-button type="primary" @click="gotoPage">查看评测结果</el-button>
+        <el-button type="primary" @click="gotoPage" style="background-color: #ee7f60;">查看评测结果</el-button>
       </span>
     </el-dialog>
   </div>
@@ -589,6 +589,6 @@ export default {
   }
   /* 预览部分的背景 */
   .v-show-content{
-    background-image: url(../assets/image/banner4.png) !important;
+    /* background-image: url(../assets/image/banner4.png) !important; */
   }
 </style>
