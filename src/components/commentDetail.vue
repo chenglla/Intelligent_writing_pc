@@ -149,12 +149,12 @@ export default {
     },
     getData () {
       const prames = {
-        // title: this.title,
-        // passage: this.passage,
-        // user: this.user
-        title: null,
-        passage: null,
-        user: null
+        title: this.title,
+        passage: this.passage,
+        user: this.user
+        // title: null,
+        // passage: null,
+        // user: null
 
       }
       intelligentMeasurement2(prames).then((res) => {
