@@ -251,7 +251,12 @@ export default {
       username: localStorage.username,
     }
   },
-
+  watch: {
+     input3(newName, oldName) {
+       localStorage.setItem("INPUT3",newName)
+       console.log("watch到的input3",localStorage.getItem("INPUT3"))
+     }
+   } ,
   mounted() {
     // getCookie()
     // if (localStorage.getItem('username') === 'null') {
@@ -277,7 +282,12 @@ export default {
       //console.log(this.select)
     },
     research: function () {
+      // this.researchFlag = true
+      // localStorage.setItem("RESEARCH_FLAG",true)
+      localStorage.setItem("INPUT3",this.input3)
+      console.log("INPUT3",localStorage.getItem("INPUT3"))
       this.$emit('selectWord', this.input3)
+      // localStorage.setItem("SELECT_WORD",this.input3)
     },
 
     beginRegistered: function () {
