@@ -3,12 +3,12 @@
 <!--    <el-divider></el-divider>-->
     <div class="tagContainer">
       <div class="small_tag">
-        <el-tag class="addColor label_all label_item" style="margin-left: 2%;margin-top: 2%;cursor:pointer;" type="info" @click="getData(1)">全部</el-tag>
+        <el-tag class="addColor label_all label_item" style="margin-left: 2%;margin-top: 2%;cursor:pointer;" type="info" @click="gotoAll">全部</el-tag>
         <el-tag style="margin-left: 2%;margin-top: 2%;cursor:pointer;" class="label_item labelI" v-for="(item, index) in compositionType " :key="index" @click.native = "gotoType(index)"> {{item}}</el-tag>
       </div>
     </div>
     <!-- 全部 -->
-    <div>
+    <div class="jump_all">
       <el-divider></el-divider>
           <el-row style="background: #F5F5F5;padding-top: 10px;margin-bottom: 0">
             <el-col :span="4">
@@ -133,6 +133,7 @@
     </div>
     <!-- 触底弹框 -->
     <el-drawer
+
       :modal="false"
       size="38%"
       withHeader="false"
@@ -150,7 +151,7 @@
         </el-input>
       </div>
       <div class="small_tag">
-        <el-tag class="addColor label_all label_item " style="margin-left: 2%;margin-top: 2%;cursor:pointer;" type="info" @click="getData(1)">全部</el-tag>
+        <el-tag class=" label_all label_item" style="margin-left: 2%;margin-top: 2%;cursor:pointer;" type="info" @click="gotoAll">全部</el-tag>
         <el-tag style="margin-left: 2%;margin-top: 2%;cursor:pointer;" class="label_item labelI" v-for="(item, index) in compositionType " :key="index" @click.native = "gotoType(index)"> {{item}}</el-tag>
       </div>
     </el-drawer>
@@ -200,7 +201,7 @@ export default {
   mounted () {
     // if(this.input3 === ''){
     //   console.log("无")
-    //   this.researchFlag = false
+     localStorage.setItem("RESEARCH_FLAG",false)
     //   localStorage.setItem("RESEARCH_FLAG",false)
     // }
     console.log('长度：', this.fatherArray.length, this.total)
@@ -222,18 +223,26 @@ export default {
   //   })
   // },
   methods: {
+    gotoAll(){
+       console.log("gotoAll运行了")
+       let jump = document.querySelector('.jump_all')
+       let total = jump.offsetTop
+       document.documentElement.scrollTop = total-85
+        console.log("调到的位置",total)
+    },
     gotoType(index){
       // this.currentType = index
       let labelAll = document.querySelector('.label_all')
-      labelAll.className = 'label_item label_all'
+      labelAll.className = 'label_item label_all label1'
       console.log('labelAll', labelAll)
       let labelItem = document.querySelectorAll('.labelI')
       console.log('labelItem', labelItem)
       for (let j = 0; j < labelItem.length; j++) {
         console.log(j)
-        labelItem[j].className = 'label_item labelI'
+        labelItem[j].className = 'label_item labelI label1'
       }
-      labelItem[index].className = 'addColor label_item labelI'
+      labelItem[index].className = 'addColor label_item labelI label1'
+
       let jump = document.querySelectorAll('.d_jump')
       // console.log("jump",jump)
        // 获取需要滚动的距离
@@ -255,7 +264,7 @@ export default {
       let scrollHight = document.documentElement.scrollTop
 
       if(this.close===false){ // 用户未关闭过才会运行
-        if(scrollHight > 600){
+        if(scrollHight > 610){
           this.drawer = true
           // console.log("我运行了")
         }else{
@@ -274,7 +283,8 @@ export default {
     },
     research: function () {
         this.input3 = localStorage.getItem("INPUT3")
-
+        this.currentPage = 1
+        this.gotoAll()
         if (this.select === '') {
           this.$message.warning('请选择搜索类型')
         } else if (this.select === '普通检索') {
@@ -307,7 +317,7 @@ export default {
           const prams = {
             query: this.input3,
             page: 1,
-            size:10
+            //size:10
           }
           this.loading = true
           getResearchListData(prams).then(respone => {
@@ -390,14 +400,11 @@ export default {
       }
     },
     handleCurrentChange (val) {//全部的换一页
-      console.log("456",localStorage.getItem("INPUT3"))
-      this.input3 = localStorage.getItem("INPUT3")
-      console.log("456",this.input3)
       this.researchFlag = localStorage.getItem("RESEARCH_FLAG")
       // this.researchFlag = localStorage.getItem("RESEARCH_FLAG")
       // console.log("researchFlag",this.researchFlag )
       console.log("flag",this.researchFlag)
-      if (this.researchFlag  === false) {
+      if (this.researchFlag  === 'false') {
         console.log(`当前页: ${val}`)
         const prams = {
           page: val - 1,
@@ -409,10 +416,13 @@ export default {
           // this.compositionData = respone.data.data.list
         })
       } else {
+        this.input3 = localStorage.getItem("INPUT3")
+        console.log("456",this.input3)
         console.log(`当前查询页: ${val}`)
         const prams = {
           query: this.input3,
-          page: val - 1
+          page: val - 1,
+          size:10
         }
         this.loading = true
         getResearchListData(prams).then(respone => {
@@ -483,6 +493,7 @@ export default {
       //     }
       //   }
       // }, 150)
+      console.log("getData运行了",flag)
       const prams = {
         page: 0,
         user: this.username
@@ -662,6 +673,9 @@ export default {
   small_tag2_item:hover{
     background-color: #FE7756;
   }
+  .label1:hover{
+    background-color: #FE7756;
+  }
 </style>
 <style>
   .el-tag {
@@ -674,5 +688,8 @@ export default {
   }
   .el-icon-close:before {
     color: white;
+  }
+  .addColor1{
+    background-color: black;
   }
 </style>
