@@ -244,6 +244,8 @@ export default {
       this.showDialogTwo = val
     },
     getSelectContent () {
+      //点击搜索之后滚动条位置下滑至全部
+      document.documentElement.scrollTop = 400
       // this.fatherData = []
       if (this.select === '') {
         this.$message.warning('请选择搜索类型')
@@ -251,7 +253,8 @@ export default {
         this.researchFlag = true
         const prams = {
           title: this.selectWord,
-          page: 0
+          page: 0,
+          size:10
         }
         this.loading = true
         getfindByTitle2(prams).then(respone => {
