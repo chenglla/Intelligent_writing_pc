@@ -132,29 +132,36 @@
       </div>
     </div>
     <!-- 触底弹框 -->
-    <el-drawer
+    <div
+      class="drawer_info"
+      v-if="drawer === 1">
+<!--      <el-drawer-->
+<!--        :modal="false"-->
+<!--        :wrapperClosable="false"-->
+<!--        :modal-append-to-body="false"-->
+<!--        size="35%"-->
+<!--        withHeader="false"-->
+<!--        :visible.sync="drawer"-->
+<!--        :direction="direction"-->
+<!--        :before-close="handleClose"-->
+<!--      >-->
+        <span class="close-btn" @click="closeByButton">X</span>
+        <div class="card-one">
+          <el-input placeholder="请输入关键字" v-model="input3" class="input-with-select">
+            <el-select v-model="select" slot="prepend" placeholder="请选择" style="width: 100px" @change="selectchange">
+              <el-option label="普通检索" value="普通检索"></el-option>
+              <el-option label="AI检索" value="AI检索"></el-option>
+            </el-select>
+            <i class="iconfont iconsousuo" slot="append" @click="research" style="color: white;"></i>
+          </el-input>
+        </div>
+        <div class="small_tag">
+          <el-tag class=" label_all label_item" style="margin-left: 2%;margin-top: 2%;cursor:pointer;" type="info" @click="gotoAll">全部</el-tag>
+          <el-tag style="margin-left: 2%;margin-top: 2%;cursor:pointer;" class="label_item labelI" v-for="(item, index) in compositionType " :key="index" @click.native = "gotoType(index)"> {{item}}</el-tag>
+        </div>
+<!--      </el-drawer>-->
+    </div>
 
-      :modal="false"
-      size="38%"
-      withHeader="false"
-      :visible.sync="drawer"
-      :direction="direction"
-      :before-close="handleClose"
-      >
-      <div class="card-one">
-        <el-input placeholder="请输入关键字" v-model="input3" class="input-with-select">
-          <el-select v-model="select" slot="prepend" placeholder="请选择" style="width: 100px" @change="selectchange">
-            <el-option label="普通检索" value="普通检索"></el-option>
-            <el-option label="AI检索" value="AI检索"></el-option>
-          </el-select>
-          <i class="iconfont iconsousuo" slot="append" @click="research" style="color: white;"></i>
-        </el-input>
-      </div>
-      <div class="small_tag">
-        <el-tag class=" label_all label_item" style="margin-left: 2%;margin-top: 2%;cursor:pointer;" type="info" @click="gotoAll">全部</el-tag>
-        <el-tag style="margin-left: 2%;margin-top: 2%;cursor:pointer;" class="label_item labelI" v-for="(item, index) in compositionType " :key="index" @click.native = "gotoType(index)"> {{item}}</el-tag>
-      </div>
-    </el-drawer>
   </div>
 </template>
 
@@ -172,10 +179,10 @@ export default {
   },
   data () {
     return {
-      close:false,//弹框是否被手动关闭
-      direction:'btt',//自底向上
-      drawer:false,//底部上拉框
-      lists:[], // 各分类的数据
+      close: false, // 弹框是否被手动关闭
+      direction: 'btt', // 自底向上
+      drawer: -1, // 底部上拉框
+      lists: [], // 各分类的数据
       currentType: '全部',
       compositionData: [],
       compositionType: [],
@@ -201,7 +208,7 @@ export default {
   mounted () {
     // if(this.input3 === ''){
     //   console.log("无")
-     localStorage.setItem("RESEARCH_FLAG",false)
+    localStorage.setItem('RESEARCH_FLAG', false)
     //   localStorage.setItem("RESEARCH_FLAG",false)
     // }
     console.log('长度：', this.fatherArray.length, this.total)
@@ -210,7 +217,7 @@ export default {
     }
     this.total = this.fatherArray.length
     this.getCompositionType()
-    window.addEventListener('scroll',this.handleScrollx,true)
+    window.addEventListener('scroll', this.handleScrollx, true)
   },
   updated () {
     // console.log('gengixnle,', this.fatherArray)
@@ -228,7 +235,12 @@ export default {
        let jump = document.querySelector('.jump_all')
        let total = jump.offsetTop
        document.documentElement.scrollTop = total-85
-        console.log("调到的位置",total)
+        console.log('调到的位置',total)
+    },
+    closeByButton () { // 弹框关闭
+      if (this.drawer === 1) {
+        this.drawer = 0
+      }
     },
     gotoType(index){
       // this.currentType = index
@@ -252,90 +264,94 @@ export default {
        // document.body.scrollTop = total
 
        // Firefox
-       document.documentElement.scrollTop = total -75
+       document.documentElement.scrollTop = total - 75
        // Safari
        // window.pageYOffset = total
        // $('html body').animate({scrollTop: total}, 500)
     },
-    handleScrollx() {// 监测滚动条高度
-      // console.log("drawer",this.drawer)
+    handleScrollx () { // 监测滚动条高度
+      console.log('drawer', this.drawer)
       // console.log("lose:",this.close)
       // console.log("滚动条高度1",document.documentElement.scrollTop)
       let scrollHight = document.documentElement.scrollTop
 
-      if(this.close===false){ // 用户未关闭过才会运行
-        if(scrollHight > 610){
-          this.drawer = true
+      if (this.close === false) { // 用户未关闭过才会运行
+        if (scrollHight > 610) {
+          if (this.drawer === 0) {
+            this.drawer = 0
+          } else {
+            this.drawer = 1
+          }
           // console.log("我运行了")
-        }else{
-          this.drawer = false
+        } else {
+          this.drawer = -1
         }
       }
     },
-    handleClose(done) { // 关闭抽屉
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-          this.close = true
-          console.log(this.close)
+    handleClose (done) { // 关闭抽屉
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+        this.close = true
+        console.log(this.close)
     },
     research: function () {
-        this.input3 = localStorage.getItem("INPUT3")
-        this.currentPage = 1
-        this.gotoAll()
-        if (this.select === '') {
-          this.$message.warning('请选择搜索类型')
-        } else if (this.select === '普通检索') {
-          // this.researchFlag = true
-          localStorage.setItem("RESEARCH_FLAG",true)
-          console.log("flag1",this.researchFlag)
-          const prams = {
-            title: this.input3,
-            page: 0,
-            size:10
-          }
-          this.loading = true
-          getfindByTitle2(prams).then(respone => {
-            console.log('测试搜索1')
-            console.log(respone.data)
-            this.fatherArray= respone.data.data.list
-            this.total = respone.data.data.total
-            if (this.total === 0) {
-              this.$message({
-                message: '未查询到相关文章',
-                type: 'warning'
-              })
-            }
-            console.log(this.total)
-            this.loading = false
-          })
-        } else { // AI查询
-          // this.researchFlag = true
-          localStorage.setItem("RESEARCH_FLAG",true)
-          const prams = {
-            query: this.input3,
-            page: 1,
-            //size:10
-          }
-          this.loading = true
-          getResearchListData(prams).then(respone => {
-            console.log('测试搜索')
-            console.log(respone.data)
-            this.compositionData = respone.data.data.list
-            this.total = respone.data.data.total
-            if (this.total === 0) {
-              this.$message({
-                message: '未查询到相关文章',
-                type: 'warning'
-              })
-            }
-            console.log(this.total)
-            this.loading = false
-          })
+      this.input3 = localStorage.getItem('INPUT3')
+      this.currentPage = 1
+      this.gotoAll()
+      if (this.select === '') {
+        this.$message.warning('请选择搜索类型')
+      } else if (this.select === '普通检索') {
+        // this.researchFlag = true
+        localStorage.setItem("RESEARCH_FLAG",true)
+        console.log("flag1",this.researchFlag)
+        const prams = {
+          title: this.input3,
+          page: 0,
+          size:10
         }
-      },
+        this.loading = true
+        getfindByTitle2(prams).then(respone => {
+          console.log('测试搜索1')
+          console.log(respone.data)
+          this.fatherArray= respone.data.data.list
+          this.total = respone.data.data.total
+          if (this.total === 0) {
+            this.$message({
+              message: '未查询到相关文章',
+              type: 'warning'
+            })
+          }
+          console.log(this.total)
+          this.loading = false
+        })
+      } else { // AI查询
+        // this.researchFlag = true
+        localStorage.setItem("RESEARCH_FLAG",true)
+        const prams = {
+          query: this.input3,
+          page: 1,
+          //size:10
+        }
+        this.loading = true
+        getResearchListData(prams).then(respone => {
+          console.log('测试搜索')
+          console.log(respone.data)
+          this.compositionData = respone.data.data.list
+          this.total = respone.data.data.total
+          if (this.total === 0) {
+            this.$message({
+              message: '未查询到相关文章',
+              type: 'warning'
+            })
+          }
+          console.log(this.total)
+          this.loading = false
+        })
+      }
+    },
 
     compositionByType: function (item, i) {
       // console.log("按类型查",item,i)
@@ -493,7 +509,7 @@ export default {
       //     }
       //   }
       // }, 150)
-      console.log("getData运行了",flag)
+      console.log('getData运行了', flag)
       const prams = {
         page: 0,
         user: this.username
@@ -575,7 +591,6 @@ export default {
 <style scoped>
   .app-contianer {
     width: 100%;
-
   }
   .biaoqian{
     display: inline-block;
@@ -603,6 +618,7 @@ export default {
     padding-left: 10px;
   }
   .small_tag{
+    margin-top: 80px;
   }
   .input-with-select>>> .el-input-group__prepend {
     background-color: #fff;
@@ -675,6 +691,25 @@ export default {
   }
   .label1:hover{
     background-color: #FE7756;
+  }
+  .drawer_info {
+    /*background-color: #eee;*/
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 300px;
+    z-index: 2001;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    transition: height .2s;
+  }
+  .drawer_info .close-btn {
+    color: #fff;
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    cursor: pointer;
   }
 </style>
 <style>
