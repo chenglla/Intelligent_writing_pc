@@ -115,22 +115,22 @@ export default {
       }
     },
     lastPage () {
-      if(this.page>0){
+      if (this.page > 0) {
         this.page -= 2
-        console.log("当前页",this.page)
+        console.log('当前页',this.page)
         if (this.selectWord === '') {
-          if (this.page >= 2) {
+          if (this.page >= 0) {
             this.getCurrentData()
             this.getCurrentRightData()
           }
         } else {
-          if (this.page >= 2) {
+          if (this.page >= 0) {
             this.getSelectContent(this.selectWord)
             this.getSelectRContent(this.selectWord)
           }
         }
       }
-      //this.page = 0
+      // this.page = 0
     },
     getSelectData (word) { // 获取搜索数据
       this.dataTypeList = []
@@ -231,6 +231,7 @@ export default {
     height: 100%;
   }
   .more_second {
+    margin-top: 80px;
     height: 870px;
     text-align: center;
     background: url('../assets/image/book_back.png') no-repeat;
