@@ -251,7 +251,12 @@ export default {
       username: localStorage.username,
     }
   },
-
+  watch: {
+     input3(newName, oldName) {
+       localStorage.setItem("INPUT3",newName)
+       console.log("watch到的input3",localStorage.getItem("INPUT3"))
+     }
+   } ,
   mounted() {
     // getCookie()
     // if (localStorage.getItem('username') === 'null') {
@@ -277,7 +282,13 @@ export default {
       //console.log(this.select)
     },
     research: function () {
+      // this.researchFlag = true
+      // localStorage.setItem("RESEARCH_FLAG",true)
+      localStorage.setItem("INPUT3",this.input3)
+      console.log("INPUT3",localStorage.getItem("INPUT3"))
+      localStorage.setItem("RESEARCH_FLAG",true)
       this.$emit('selectWord', this.input3)
+      // localStorage.setItem("SELECT_WORD",this.input3)
     },
 
     beginRegistered: function () {
@@ -586,6 +597,7 @@ export default {
 <style>
   .el-header {
     padding: 0 0  0 20px;
+    width:100vw;
   }
   .login_input .el-input-group__prepend {
     background-color: #ee7f60;

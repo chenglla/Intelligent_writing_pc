@@ -3,12 +3,12 @@
     <div class="logo_info">
       <img src="../assets/image/logo.png" alt="">
     </div>
-    <div class="article">
+    <div class="article" >
       <el-scrollbar style="height: 100%;width: 99vw;">
         <el-row >
           <el-col :span="12" :offset="5">
             <div style="height: 130px;background-color: none;"></div>
-            <div style="background-color: rgb(248, 225, 204);padding-top: 20px;width: 50vw;">
+            <div ref="pronbit" style="background-color: rgb(248, 225, 204);padding-top: 20px;width: 50vw;">
               <h1>{{ListData.title}}</h1>
               <div class="topic">
                 <a>{{ListData.type}}</a>
@@ -27,15 +27,48 @@
             </div>
           </el-col>
           <el-col :span="5" :offset="1">
-            <div class="hot-right">
-              <span class="hot-title">热门推荐</span>
+            <div class="hot-right" id="hot_right" style="width: 17vw;">
+              <span class="hot-title" >热门推荐</span>
               <el-divider>
                 <i class="iconfont iconremen" style="color: coral;"></i>
                 <i class="iconfont iconremen" style="color: yellow;"></i>
                 <i class="iconfont iconremen" style="color: red;"></i>
-                <i class="iconfont iconremen" style="color: orange;"></i>
+                <!-- <i class="iconfont iconremen" style="color: orange;"></i> -->
               </el-divider>
+              <div style="margin: 14px;text-align: left;letter-spacing: 2px;">
+                <div style="margin: 20px 0;">
+                  <div class="art_title">远方不远，杨帆彼岸</div>
+                  <span class="art_type">议论</span>
+                  <i class="el-icon-view"></i>
+                  <span class="see_num">200</span>
+                </div>
+                <div style="margin: 20px 0;">
+                  <div class="art_title">布鞋和母亲</div>
+                  <span class="art_type">叙事</span>
+                  <i class="el-icon-view"></i>
+                  <span class="see_num">193</span>
+                </div>
+                <div style="margin: 20px 0;">
+                  <div class="art_title">懂我的人，谢谢你</div>
+                  <span class="art_type">写人</span>
+                  <i class="el-icon-view"></i>
+                  <span class="see_num">184</span>
+                </div>
+                <div style="margin: 20px 0;">
+                  <div class="art_title">一片泥土的经历</div>
+                  <span class="art_type">叙事</span>
+                  <i class="el-icon-view"></i>
+                  <span class="see_num">160</span>
+                </div>
+                <div style="margin: 20px 0;">
+                  <div class="art_title">意外的早餐</div>
+                  <span class="art_type">日记</span>
+                  <i class="el-icon-view"></i>
+                  <span class="see_num">121</span>
+                </div>
+              </div>
             </div>
+
           </el-col>
         </el-row>
 
@@ -52,15 +85,57 @@ export default {
     return {
       id: '',
       ListData: {},
-      StrData: ''
+      StrData: '',
+      scrollHeigh:0,
     }
   },
   mounted () {
     this.id = this.$route.query.id
     console.log(this.id)
     this.getContent()
+    window.addEventListener('scroll',this.handleScrollx,true)
+  },
+  watch: {
+
   },
   methods: {
+    handleScrollx() {
+        console.log("滚动条高度1",document.documentElement.scrollTop)
+    	  console.log('滚动高度',window.pageYOffset)
+    	  console.log('距离顶部高度',this.$refs.pronbit.getBoundingClientRect().top)
+        this.scrollHeigh = this.$refs.pronbit.getBoundingClientRect().top
+        if(this.scrollHeigh < -460){
+           document.getElementById("hot_right").style.marginTop='10px'
+           document.getElementById("hot_right").style.position='fixed'
+           document.getElementById("hot_right").style.width='17vw'
+          // document.getElementById("hot_right").style.backgroundColor="red"
+           console.log("我运行了")
+        }else{
+          document.getElementById("hot_right").style.marginTop='40px'
+          document.getElementById("hot_right").style.position='relative'
+          document.getElementById("hot_right").style.width='17vw'
+        }
+    	},
+     // window.onscroll = _=>{
+     //     console.log(document.documentElement.scrollTop)
+     //     let oA = document.querySelector("#a");
+     //     console.log(oA.offsetTop)
+     //     if((document.documentElement.scrollTop+ document.documentElement.clientHeight) >= oA.offsetTop){
+     //         console.log('true')
+     //         oA.style.width='500px';
+     //     }
+     // },
+
+
+    // scrollHeigh(){
+    //   $(window).scroll(function(){   //开始监听滚动条
+    //     this.scrollHeigh = $(document).scrollTop();  //滚动条距离顶部的高度
+    //      console.log(top)
+    //      if(top > 600 ) {
+    //        document.getElementById("hot_right").style.marginTop='600'
+    //      }
+    //     })
+    // },
     getContent () {
       const params = {
         id: this.id
@@ -72,7 +147,13 @@ export default {
         }
       })
     }
-  }
+  },
+  // destroyed () { //离开这个界面之后，删除，不然会有问题
+  //     window.removeEventListener('scroll', this.handleScrollx,false)
+  // },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScrollx,false)
+  },
 }
 </script>
 
@@ -136,7 +217,7 @@ export default {
   }
   /* 右边推荐部分 */
   .hot-right{
-    height: 500px;
+    height: 360px;
     background-color: white;
     margin-top: 40px;
     padding: 30px 10px;
@@ -152,6 +233,25 @@ export default {
     margin-bottom: 20px;
     /*margin-right: 70%;*/
     margin-top: 20px;
+  }
+  .el-icon-view{
+    font-size: 10px;
+    color: #475669;
+    margin-left: 10px;
+  }
+  .see_num{
+    color: #475669;
+    font-size: 14px;
+  }
+  .art_type{
+    color: #475669;
+    font-size: 14px;
+
+    /* background-color: yellow; */
+  }
+  .art_title:hover{
+    color: #0061E4;
+    cursor: pointer;
   }
 </style>
 <style>

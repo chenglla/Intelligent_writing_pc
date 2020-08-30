@@ -204,6 +204,11 @@ export default {
       total: 0
     }
   },
+  watch: {
+     input3(newName, oldName) {
+       localStorage.setItem("INPUT3",newName)
+     }
+   } ,
   inject: ['reload'],
   mounted () {
     // 修改
@@ -213,7 +218,7 @@ export default {
     this.judgeFlag()
     if (this.selectWord === '') {
       console.log('zhixinglemounted')
-      this.getData()
+      // this.getData()
     }
   },
   watch: {
@@ -239,6 +244,8 @@ export default {
       this.showDialogTwo = val
     },
     getSelectContent () {
+      //点击搜索之后滚动条位置下滑至全部
+      document.documentElement.scrollTop = 400
       // this.fatherData = []
       if (this.select === '') {
         this.$message.warning('请选择搜索类型')
@@ -246,7 +253,8 @@ export default {
         this.researchFlag = true
         const prams = {
           title: this.selectWord,
-          page: 0
+          page: 0,
+          size:10
         }
         this.loading = true
         getfindByTitle2(prams).then(respone => {
@@ -326,16 +334,16 @@ export default {
         this.showDialogTwo = false
       }
     },
-    getData: function () {
-      const prams = {
-        page: 1
-      }
-      getCompositionListData(prams).then(respone => {
-        this.fatherData = respone.data.data.list
-        console.log('输出测试111')
-        console.log(this.fatherData)
-      })
-    },
+    // getData: function () {
+    //   const prams = {
+    //     page: 1
+    //   }
+    //   getCompositionListData(prams).then(respone => {
+    //     this.fatherData = respone.data.data.list
+    //     console.log('输出测试111')
+    //     console.log(this.fatherData)
+    //   })
+    // },
     login: function () {
       // this.loginFlag = '是'
       // // alert('登录成功')
@@ -400,13 +408,18 @@ export default {
     //   console.log(this.select)
     // },
     research: function () {
+      localStorage.setItem("INPUT3",this.input3)
+      console.log("INPUT3",localStorage.getItem("INPUT3"))
+      console.log("此时的选择类型",this.select)
       if (this.select === '') {
         this.$message.warning('请选择搜索类型')
       } else if (this.select === '普通检索') {
         this.researchFlag = true
+        localStorage.setItem("RESEARCH_FLAG",true)
         const prams = {
           title: this.input3,
-          page: 0
+          page: 0,
+          size:10
         }
         this.loading = true
         getfindByTitle2(prams).then(respone => {
@@ -423,11 +436,13 @@ export default {
           console.log(this.total)
           this.loading = false
         })
-      } else {
+      } else { // AI查询
         this.researchFlag = true
+        localStorage.setItem("RESEARCH_FLAG",true)
         const prams = {
           query: this.input3,
-          page: 1
+          page: 1,
+          size:10
         }
         this.loading = true
         getResearchListData(prams).then(respone => {

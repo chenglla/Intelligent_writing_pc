@@ -73,7 +73,8 @@ export default {
         })
       } else {
         const prams = {
-          type1: this.currentType
+          type1: this.currentType,
+          page: this.page,
         }
         getCompositionDataByType(prams).then(response => {
           console.log(response.data)
@@ -95,7 +96,8 @@ export default {
         })
       } else {
         const prams = {
-          type1: this.currentType
+          type1: this.currentType,
+          page: this.page + 1,
         }
         getCompositionDataByType(prams).then(response => {
           console.log(response.data)
@@ -147,7 +149,8 @@ export default {
         // this.researchFlag = true
         const prams = {
           title: word,
-          page: this.page
+          page: this.page,
+          // size:10
         }
         this.loading = true
         getfindByTitle2(prams).then(respone => {
@@ -165,7 +168,8 @@ export default {
         // this.researchFlag = true
         const prams = {
           query: word,
-          page: this.page
+          page: this.page,
+          size:10
         }
         this.loading = true
         getResearchListData(prams).then(respone => {
@@ -205,7 +209,8 @@ export default {
         // this.researchFlag = true
         const prams = {
           query: word,
-          page: this.page + 1
+          page: this.page + 1,
+          size:10
         }
         this.loading = true
         getResearchListData(prams).then(respone => {
@@ -257,7 +262,7 @@ export default {
     top: 20%;
   }
   .more_second_content .second_left {
-    left: 32%;
+    left: 27%;
   }
   .more_second_content .second_right {
     /*position: absolute;*/
@@ -271,6 +276,10 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 200px;
+  }
+  .content_item:hover{
+    color: #0061E4;
+    text-decoration: underline;
   }
   .page_info .page_item {
     position: absolute;
