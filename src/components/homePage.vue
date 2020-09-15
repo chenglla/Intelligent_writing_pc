@@ -60,6 +60,7 @@
         <el-main class="home-main">
           <el-carousel :interval="4000" type="card" height="350px">
             <el-carousel-item v-for="item in imgList" :key="item">
+<!--              {{item}}-->
               <img :src="item" alt="">
 <!--              <h3 class="medium">{{ item }}</h3>-->
             </el-carousel-item>
@@ -151,6 +152,9 @@
 import {login} from '@/api/login'
 import {register} from '@/api/register'
 import logo from '@/assets/image/logo.png'
+// import banner1 from '@/assets/image/banner1.png'
+// import banner2 from '@/assets/image/banner2.png'
+// import banner4 from '@/assets/image/banner4.png'
 import searchSection from '@/components/searchSection'
 import allHeader from '@/components/allHeader'
 import compositionList from '@/components/compositionList'
@@ -163,7 +167,12 @@ export default {
     return {
       gradeValue: '',
       researchFlag: false,
-      imgList: [require('../assets/image/banner1.png'), require('../assets/image/banner2.png'), require('../assets/image/banner4.png')],
+      // imgList: [banner1, banner2, banner4],
+      imgList: ['http://zhihejiaoyu.cn/reveal/img/xiezuo1.png', 'http://zhihejiaoyu.cn/reveal/img/xiezuo2.png', 'http://zhihejiaoyu.cn/reveal/img/xiezuo3.png'],
+      // imgList: [{url: 'http://zhihejiaoyu.cn/reveal/img/xiezuo1.png'}, {url: 'http://zhihejiaoyu.cn/reveal/img/xiezuo2.png'}, {url: 'http://zhihejiaoyu.cn/reveal/img/xiezuo3.png'}],
+      // imgList: [{url: require('../../src/assets/image/banner1.png')}, {url: require('../../src/assets/image/banner2.png')}, {url: require('../../src/assets/image/banner4.png')}],
+      // imgList: [require('../../src/assets/image/banner1.png'), require('../../src/assets/image/banner2.png'), require('../../src/assets/image/banner4.png')],
+      // banner1: banner1,
       select: '普通检索',
       input3: '',
       options: [{
