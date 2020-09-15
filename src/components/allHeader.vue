@@ -196,8 +196,6 @@ export default {
   components: {userPopover},
   data () {
     return {
-      //checkList:[],
-      //rememberName:false,
       gradeValue: '',//选中的年级
       select: '普通检索',
       input3: '',
@@ -208,11 +206,6 @@ export default {
       researchFlag: false,
       compositionData: [], // 搜索到的所有数据
       // total: 0, // 搜索到的数据数量
-
-      // rememberName:false,//记住用户名
-      // autoLogin:false,//自动登录
-      // vcode:'',//用户输入的验证码
-      // ccode:'',//验证码
 
       rememberName: false, // 记住用户名
       autoLogin: false, // 自动登录
@@ -267,9 +260,9 @@ export default {
     this.clearLogin()//判断用户登录状态
   },
   methods: {
-    changeRem(){ // 记住密码多选框选中状态
-      this.rememberName = !this.rememberName
-    },
+    // changeRem(){ // 记住密码多选框选中状态
+
+    // },
     clearLogin(){ //更换登录状态
       console.log("页面刷新后，登录状态",localStorage.getItem("LOGINFLAG"))
       this.loginFlag = localStorage.getItem("LOGINFLAG")
@@ -378,7 +371,9 @@ export default {
         //console.log("PASSWORD2",localStorage.getItem("PASSWORD"))
         this.loginForm.user_name = localStorage.getItem("USERNAME")
         this.loginForm.password = localStorage.getItem("PASSWORD")
+        // let a = localStorage.getItem("REM_NAME")
         this.rememberName = localStorage.getItem("REM_NAME")
+        // console.log("变成布尔型了吗",typeof this.rememberName)
         // this.loginForm.user_name = "tpp"
         // this.loginForm.password = 'xgg'
         //console.log("自动登录的本地存储",localStorage.getItem("AUTO_LOGIN"))
@@ -399,10 +394,15 @@ export default {
       // this.loginFlag = '是'
       // // alert('登录成功')
       // this.showDialog = false
-
+      var un = localStorage.getItem("USERNAME")
+      var pwd = localStorage.getItem("PASSWORD")
+      // var un = this.$md5('localStorage.getItem("USERNAME")')
+      // var pwd = this.$md5('localStorage.getItem("PASSWORD")')
+      console.log("加密之后的用户名",un)
+      console.log("加密之后的用户名",pwd)
       const prams = {
-        username: localStorage.getItem("USERNAME"),
-        password: localStorage.getItem("PASSWORD")
+        username: un,
+        password: pwd
       }
       login(prams).then(respone => {
         //localStorage.clear()

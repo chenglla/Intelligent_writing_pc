@@ -17,25 +17,21 @@
         <el-col :span="2" :offset="10">
           <div class="tubiao-contianer">
             <div class="tubiao">
-              <!--                <i class="el-icon-s-data"></i>-->
             </div>
             <div class="title">
-              <!--                <span style="color: dimgrey;cursor: pointer" @click="goCompositionContent">智能测评</span>-->
             </div>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="tubiao-contianer">
             <div class="tubiao">
-              <!--                <i class="el-icon-s-custom"></i>-->
             </div>
             <div class="title">
-              <!--                <span v-if="loginFlag==='否'" style="color: dimgrey;cursor: pointer" @click="showLogin">登录</span>-->
-              <!--                <span v-else style="color: dimgrey">我的</span>-->
-            </div>
+           </div>
           </div>
         </el-col>
       </el-row>
+
     </el-header>
 <!--    <div class="logo_info">-->
 <!--      <img src="../assets/image/logo.png" alt="">-->
