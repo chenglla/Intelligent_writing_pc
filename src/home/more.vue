@@ -3,7 +3,8 @@
     <all-header @selectWord="getSelectData"></all-header>
     <div class="more_second">
       <div class="second_title">
-        首页>{{currentType}}
+        <span class="shouye" @click="goBack()">首页</span>
+        >{{currentType}}
       </div>
       <img src="../assets/image/book.png" alt="">
       <div class="more_second_content">
@@ -50,6 +51,9 @@ export default {
     this.getCurrentRightData()
   },
   methods: {
+    goBack(){
+      this.$router.go(-1)
+    },
     gotoPage(item){
       console.log('点击没：')
       this.$router.push({
@@ -235,6 +239,9 @@ export default {
     /*background-image: url('../assets/image/background.jpg');*/
     height: 100%;
   }
+  .shouye:hover{
+    color: #3399cc;
+  }
   .more_second {
     margin-top: 80px;
     height: 870px;
@@ -279,7 +286,7 @@ export default {
   }
   .content_item:hover{
     color: #0061E4;
-    text-decoration: underline;
+    /*text-decoration: underline;*/
   }
   .page_info .page_item {
     position: absolute;

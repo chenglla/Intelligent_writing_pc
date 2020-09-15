@@ -6,7 +6,9 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
+import md5 from 'js-md5'
 
+Vue.prototype.$md5 = md5
 Vue.prototype.$qs = qs
 Vue.config.productionTip = false
 

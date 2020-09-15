@@ -533,12 +533,14 @@ export default {
       // })
       // window.open(href, '_bank')
       console.log('点击没：')
-      this.$router.push({
+      const {href} = this.$router.resolve({
         path: '/compositiondetails',
         query: {
           id: item.id
         }
+
       })
+      window.open(href,'_blank')
       console.log("id",item)
     },
     like: function (item) {
