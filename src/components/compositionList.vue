@@ -695,7 +695,7 @@ export default {
   .drawer_info {
     /*background-color: #eee;*/
     background-color: rgba(0, 0, 0, 0.5);
-    height: 300px;
+    height: 230px;
     z-index: 2001;
     position: fixed;
     left: 0;

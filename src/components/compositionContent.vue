@@ -47,10 +47,7 @@
                 <i class="iconfont icontupianshangchuan"></i>
                 图片上传
               </el-button>
-              <el-button class="onMeasure" type="primary" @click="beginMeasure">
-                <i class="iconfont iconzhinengceping-"></i>
-                <span >点击进行智能评测</span>
-              </el-button>
+
               <el-dialog
                 title="提示：请按照先带有标题页，再是作文页的顺序进行上传"
                 :visible.sync="dialogVisible1"
@@ -144,6 +141,10 @@
             </div>
           </el-aside>
         </el-container>
+        <el-button class="onMeasure" type="primary" @click="beginMeasure">
+          <i class="iconfont iconzhinengceping-"></i>
+          <span >点击进行智能评测</span>
+        </el-button>
       </el-main>
       <el-footer>
         <div class="copyrightContainer">
@@ -423,7 +424,7 @@ export default {
 
 <style  scoped>
 	.app-container{
-		
+
 	}
   .logo_container{
     padding-top: 20px;
@@ -502,13 +503,26 @@ export default {
     border: 0;
   }
   .uploadImg{ /* 图片上传按钮 */
-    margin-left: 90px;
+    width: 200px;
+    margin-left: 6vw;
     margin-bottom: 20px;
+    color: black;
+    font-size: 14px;
+    text-space: 1px;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .uploadImg:hover{
+    color: white;
     background: linear-gradient(to right ,#FE7655,#FF9972);
   }
   .onMeasure{/* 点击开始测试按钮 */
-    color: black;
+    margin-left: 60vw;
+    color: white;
+    background: linear-gradient(to right ,#FE7655,#FF9972);
   }
+  /*.onMeasure:hover{*/
+  /*  background: linear-gradient(to right ,#2C8AC7,#54CAEE);*/
+  /*}*/
   .el-upload .icontupianshangchuan{/* 提交图片弹窗的图标 */
     font-size: 100px;
   }
