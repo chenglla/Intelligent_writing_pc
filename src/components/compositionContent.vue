@@ -514,6 +514,7 @@ export default {
   .uploadImg:hover{
     color: white;
     background: linear-gradient(to right ,#FE7655,#FF9972);
+    border-color: #FF9972;
   }
   .onMeasure{/* 点击开始测试按钮 */
     margin-left: 60vw;
