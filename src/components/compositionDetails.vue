@@ -135,9 +135,9 @@ export default {
   },
   methods: {
     handleScrollx() {
-        console.log("滚动条高度1",document.documentElement.scrollTop)
-    	  console.log('滚动高度',window.pageYOffset)
-    	  console.log('距离顶部高度',this.$refs.pronbit.getBoundingClientRect().top)
+        // console.log("滚动条高度1",document.documentElement.scrollTop)
+    	  // console.log('滚动高度',window.pageYOffset)
+    	  // console.log('距离顶部高度',this.$refs.pronbit.getBoundingClientRect().top)
         this.scrollHeigh = this.$refs.pronbit.getBoundingClientRect().top
         if(this.scrollHeigh < -460){
            document.getElementById("hot_right").style.marginTop = '10px'

@@ -59,9 +59,9 @@
       </el-row>
     </el-header>
     <!-- 登录弹框 -->
-    <el-dialog  :visible.sync="showDialog" width="30%" custom-class="loginUp-dialog">
-      <el-form  :model="loginForm"  class="loginUp" auto-complete="on" label-position="left">
-        <el-form-item >
+    <el-dialog  :visible.sync="showDialog" width="30%" custom-class="loginUp-dialog" >
+      <el-form  :model="loginForm" :rules="rules1" class="loginUp" auto-complete="on" label-position="left">
+        <el-form-item  prop="user_name">
           <el-input
             v-model="loginForm.user_name"
             placeholder="请输入您的用户名"
@@ -75,10 +75,13 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
+            type="password"
+            minlength="8"
+            maxlength="12"
             v-model="loginForm.password"
-            placeholder="请输入您的密码"
+            placeholder="请输入8-12位密码"
             name="password"
             show-password
             auto-complete="on"
@@ -88,14 +91,20 @@
               <i class="iconfont iconsuo"  style="color: white;"></i>
             </template>
           </el-input>
+<!--          <div style="float: right">-->
+<!--            <span v-show="loginPwdLevel === 1" style="color: red;font-weight: 900;">弱</span>-->
+<!--            <span v-show="loginPwdLevel === 2" style="color: orange;font-weight: 900;">中</span>-->
+<!--            <span v-show="loginPwdLevel === 3" style="color: green;font-weight: 900;">强</span>-->
+<!--          </div>-->
         </el-form-item>
-        <el-form-item >
+        <el-form-item prop="vcode">
           <el-input
-            v-model="vcode"
+            v-model="loginForm.vcode"
             placeholder="请输入右侧验证码"
             name="Num"
             style="width: 65%;"
             auto-complete="on"
+
             ></el-input>
             <div class="ccode" @click="handleCode">{{ccode}}</div>
         </el-form-item >
@@ -123,8 +132,8 @@
     </el-dialog>
     <!--注册弹框-->
     <el-dialog  :visible.sync="showDialogTwo" width="30%">
-      <el-form  :model="loginForm" class="login-form" auto-complete="on" label-position="left">
-        <el-form-item>
+      <el-form  :model="registerForm" :rules="rules" class="login-form" auto-complete="on" label-position="left">
+        <el-form-item prop="user_name">
           <el-input
             v-model="registerForm.user_name"
             placeholder="请输入用户名"
@@ -138,10 +147,14 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
+            @input="registerPwd()"
+            type="password"
+            minlength="8"
+            maxlength="12"
             v-model="registerForm.password"
-            placeholder="请输入密码"
+            placeholder="请输入8-12位多种数据类型密码"
             name="password"
             show-password
             auto-complete="on"
@@ -150,8 +163,13 @@
               <i class="iconfont iconsuo"  style="color: white;"></i>
             </template>
           </el-input>
+          <div style="float: right">
+            <span v-show="pwdLevel === 1" style="color: red">弱</span>
+            <span v-show="pwdLevel === 2" style="color: orange">中</span>
+            <span v-show="pwdLevel === 3" style="color: green">强</span>
+          </div>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="school_name">
           <el-input
             v-model="registerForm.school_name"
             placeholder="请输入学校名称"
@@ -166,8 +184,8 @@
           </el-input>
         </el-form-item>
 
-        <el-form-item>
-          <el-select v-model="gradeValue" placeholder="请选择年级" @change="showGrade">
+        <el-form-item prop="gradeValue">
+          <el-select style="" v-model="gradeValue" placeholder="请选择年级" @change="showGrade">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -177,7 +195,17 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" class="login-button"  @click="register">注册</el-button>
+        <el-form-item prop="rvcode">
+          <el-input
+            v-model="registerForm.rvcode"
+            placeholder="请输入右侧验证码"
+            name="Num"
+            style="width: 65%;"
+            auto-complete="on"
+          ></el-input>
+          <div class="ccode" @click="handleCodeR">{{rccode}}</div>
+        </el-form-item >
+        <el-button v-model="register"  type="primary" class="login-button"  @click="checkForm">注册</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -196,7 +224,77 @@ export default {
   components: {userPopover},
   data () {
     return {
-      gradeValue: '',//选中的年级
+      pwdLevel:0,
+      // loginPwdLevel:0,
+      // 注册
+      rules:{
+        user_name: [{
+          required: true,
+          message: "请输入用户名",
+          trigger: 'blur'
+        }
+        ],
+        password:[
+          {
+            pattern: /^(\w){8,12}$/,
+            // pattern: /^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{7,16}$/,
+
+            message: "请同时具备字母、数字下划线的8-12位密码",
+            trigger: 'change'
+          },{
+          required: true,
+          message: "请输入密码",
+          trigger: 'blur'
+        },{
+          min:8,
+          max:12,
+          message: "密码长度少于8位",
+          trigger: 'blur'
+        },],
+        school_name: [{
+          required: true,
+          message: "请输入您所在的学校",
+          trigger: 'blur'
+        }
+        ],
+        rvcode: [{
+          required: true,
+          message: "请输入验证码",
+          trigger: 'blur'
+        }
+        ],
+      },
+      // 登录
+      rules1: {
+        user_name: [{
+          required: true,
+          message: "请输入用户名",
+          trigger: 'blur'
+        }
+        ],
+        password:[
+          {
+            pattern: /^(\w){8,12}$/,
+            message: "密码为8-12位，且同时具备字母、数字和下划线",
+            trigger: 'change'
+          },{
+            required: true,
+            message: "请输入密码",
+            trigger: 'blur'
+          },{
+            min:8,
+            max:12,
+            message: "密码长度少于8位",
+            trigger: 'blur'
+          },],
+        vcode: [{
+          required: true,
+          message: "请输入验证码",
+          trigger: 'blur'
+        }
+        ],
+      },
+
       select: '普通检索',
       input3: '',
       logo: logo,
@@ -209,8 +307,8 @@ export default {
 
       rememberName: false, // 记住用户名
       autoLogin: false, // 自动登录
-      vcode: '', // 用户输入的验证码
-      ccode: '', // 验证码
+
+
 
       options: [{
         value: 'chuyi',
@@ -234,17 +332,34 @@ export default {
       // loginFlag: '否',
       loginForm: {
         user_name: '',
-        password: ''
+        password: '',
+        vcode: '', // 登录，用户输入的验证码
       },
       registerForm: {
         user_name: '',
         password: '',
-        school_name: ''
+        school_name: '',
+        rvcode: '', // 注册，用户输入的验证码
       },
+      gradeValue: '',//选中的年级
+      ableToRegister:false,
       username: localStorage.username,
+      ccode: '', // 登录，验证码
+      rccode: '', // 注册，验证码
     }
   },
   watch: {
+    // register(newName, oldName){
+    //   console.log("时刻被监视",newName)
+    //   var un = this.registerForm.user_name
+    //   var pd = this.registerForm.password
+    //   var sn = this.registerForm.school_name
+    //   var gv = this.gradeValue
+    //   if(un.length>0 & pd.length>0 & sn.length>0 & gv.length>0){
+    //     this.ableToRegister = true
+    //   }
+    //   return this.ableToRegister
+    // },
      input3(newName, oldName) {
        localStorage.setItem("INPUT3",newName)
        console.log("watch到的input3",localStorage.getItem("INPUT3"))
@@ -256,6 +371,7 @@ export default {
     //   localStorage.clear()
     // }
     this.generatedCode()//加载验证码
+    this.generatedCodeR()//加载验证码
     this.judgeFlag()
     this.clearLogin()//判断用户登录状态
   },
@@ -263,6 +379,7 @@ export default {
     // changeRem(){ // 记住密码多选框选中状态
 
     // },
+
     clearLogin(){ //更换登录状态
       console.log("页面刷新后，登录状态",localStorage.getItem("LOGINFLAG"))
       this.loginFlag = localStorage.getItem("LOGINFLAG")
@@ -323,9 +440,12 @@ export default {
         })
       } else {
         // console.log('注册成功')
+        //var zcpwd = this.registerForm.password
+        var zcpwd = this.$encruption(this.registerForm.password)
+        console.log("注册时加密之后的密码",zcpwd)
         const prams = {
           name: this.registerForm.user_name,
-          password: this.registerForm.password,
+          password: zcpwd,
           schoolname: this.registerForm.school_name,
           nianji: this.gradeValue
         }
@@ -351,7 +471,7 @@ export default {
       })
     },
     showLogin: function () {
-      console.log("弹框之前")
+      console.log("登录弹框之前")
       console.log("USERNAME",localStorage.getItem("USERNAME"))
       console.log("PASSWORD",localStorage.getItem("PASSWORD"))
       console.log("AUTO_LOGIN",localStorage.getItem("AUTO_LOGIN"))
@@ -372,8 +492,13 @@ export default {
         this.loginForm.user_name = localStorage.getItem("USERNAME")
         this.loginForm.password = localStorage.getItem("PASSWORD")
         // let a = localStorage.getItem("REM_NAME")
-        this.rememberName = localStorage.getItem("REM_NAME")
-        // console.log("变成布尔型了吗",typeof this.rememberName)
+        if(localStorage.getItem("REM_NAME")=="true"){
+          this.rememberName = true
+            console.log("变成布尔型了吗",typeof this.rememberName)
+        }else if (localStorage.getItem("REM_NAME")=="false"){
+          this.rememberName = false
+            console.log("变成布尔型了吗",typeof this.rememberName)
+        }
         // this.loginForm.user_name = "tpp"
         // this.loginForm.password = 'xgg'
         //console.log("自动登录的本地存储",localStorage.getItem("AUTO_LOGIN"))
@@ -394,15 +519,13 @@ export default {
       // this.loginFlag = '是'
       // // alert('登录成功')
       // this.showDialog = false
-      var un = localStorage.getItem("USERNAME")
-      var pwd = localStorage.getItem("PASSWORD")
-      // var un = this.$md5('localStorage.getItem("USERNAME")')
-      // var pwd = this.$md5('localStorage.getItem("PASSWORD")')
-      console.log("加密之后的用户名",un)
-      console.log("加密之后的用户名",pwd)
+       var dlpwd = this.$encruption(localStorage.getItem("PASSWORD")) //经过RSA加密之后的密码
+      //var dlpwd = localStorage.getItem("PASSWORD") //未经过加密的密码
+      // var dlpwd = this.$md5('localStorage.getItem("PASSWORD")')//经过md5加密的密码
+      console.log("加密之后的用户名",dlpwd)
       const prams = {
-        username: un,
-        password: pwd
+        username: localStorage.getItem("USERNAME"),
+        password: dlpwd
       }
       login(prams).then(respone => {
         //localStorage.clear()
@@ -439,7 +562,10 @@ export default {
     handleCode () {
       this.generatedCode()
     },
-    // 生成验证码
+    handleCodeR () {
+      this.generatedCodeR()
+    },
+    // 生成登录界面的验证码
     generatedCode () {
       const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
         'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -450,7 +576,18 @@ export default {
       }
       this.ccode = code
     },
-    // 判断验证码是否输入准确
+    // 生成注册页面的验证码
+    generatedCodeR () {
+      const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+      let code = ''
+      for (let i = 0; i < 4; i++) {
+        let index = Math.floor(Math.random() * 36)
+        code += random[index]
+      }
+      this.rccode = code
+    },
+    // 登录界面，判断验证码是否输入准确
     checkCode () {
       //保存的账号
         // let name=this.loginForm.username;
@@ -476,12 +613,12 @@ export default {
         //console.log("自动存储存入本地",localStorage.getItem("AUTO_LOGIN"))
       }
         //console.log("checkCode") //校验验证码
-        let vcode = this.vcode
+        let vcode = this.loginForm.vcode
         vcode = vcode.toUpperCase() //不区分大小写
         let ccode = this.ccode
         ccode = ccode.toUpperCase()
         if (vcode !== ccode) {
-          this.$message.error('Please enter the correct verification code!')
+          this.$message.error('请输入正确的验证码!')
           this.generatedCode()
           // this.$set(this.loginInfo, 'vcode', '')
           // this.$set(this.loginInfo, 'password', '')
@@ -492,7 +629,76 @@ export default {
         this.generatedCode()
 
     },
+    // 注册界面，判断验证码是否输入准确
+    checkCodeR () {
+      let rvcode = this.registerForm.rvcode
+      rvcode = rvcode.toUpperCase() //不区分大小写
+      let rccode = this.rccode
+      rccode = rccode.toUpperCase()
+      if (rvcode !== rccode) {
+        this.$message.error('请输入正确的验证码!')
+        this.generatedCodeR()
+      }else {
+        this.register()
+      }
+      this.generatedCodeR()
+
+    },
+    // 检查注册表单是否填写完整
+    checkForm(){
+      if(this.registerForm.user_name.length<=0){
+        this.$message("用户名不能为空")
+      }else if(this.registerForm.password.length<8 | this.pwdLevel!=3){
+        this.$message("密码不符合要求")
+      }else if(this.registerForm.school_name.length<=0){
+        this.$message("学校名不能为空")
+      }else if(this.gradeValue.length<=0){
+        this.$message("请选择您所在的年级")
+      }else if(this.registerForm.rvcode.length <=1){
+        this.$message("请输入验证码")
+      }else{
+        this.checkCodeR()
+      }
+
+    },
+    // 注册页面密码强度
+    registerPwd () {
+      var a= this.registerForm.password;
+      console.log("输入框中值改变了",a)
+      var reg=/^[0-9]{1,12}$|^[a-zA-Z]{1,12}$/;    //全是数字或全是字母     6-16个字符
+      var reg1=/^[A-Za-z0-9]{1,12}$/;     //数字、26个英文字母      6-16个字符
+      var reg2=/^\w{1,12}$/;           // 由数字、26个英文字母或者下划线组成的字符串    6-16个字符
+      if(a.match(reg)){
+        this.pwdLevel = 1
+      }
+      else if(a.match(reg1)){
+        this.pwdLevel = 2
+      }
+      else if(a.match(reg2)){
+        this.pwdLevel = 3
+      }
+      console.log(this.pwdLevel)
+    },
+    // 登录页面密码强度
+    // loginPwd () {
+    //   var a= this.loginForm.password;
+    //   console.log("输入框中值改变了",a)
+    //   var reg=/^[0-9]{1,12}$|^[a-zA-Z]{1,12}$/;    //全是数字或全是字母     6-16个字符
+    //   var reg1=/^[A-Za-z0-9]{1,12}$/;     //数字、26个英文字母      6-16个字符
+    //   var reg2=/^\w{1,12}$/;           // 由数字、26个英文字母或者下划线组成的字符串    6-16个字符
+    //   if(a.match(reg)){
+    //     this.loginPwdLevel = 1
+    //   }
+    //   else if(a.match(reg1)){
+    //     this.loginPwdLevel = 2
+    //   }
+    //   else if(a.match(reg2)){
+    //     this.loginPwdLevel = 3
+    //   }
+    //   console.log(this.loginPwdLevel)
+    // },
   }
+
 }
 </script>
 <style scoped>
@@ -583,6 +789,14 @@ export default {
     font-weight: 600;
     background-color: white;
   }
+  .login-button-before{
+    width:100%;
+    margin-bottom:30px;
+    background-color: gray;
+    border: 0;
+    font-size: 20px;
+    letter-spacing: 0.3em;
+  }
   .login-button{
     width:100%;
     margin-bottom:30px;
@@ -593,6 +807,7 @@ export default {
   .login_input .iconfont {
     font-size: 22px;
   }
+
 </style>
 <style>
   .el-header {
@@ -618,6 +833,12 @@ export default {
   }
   .el-input-group .el-input__inner {
     border: 1px solid #ee7f60;
+  }
+  .el-input{
+    width: 92%;
+  }
+  .el-dialog__body{
+    text-align: left;
   }
   .loginUp-dialog{ /* 弹框 */
     background-color: #fff;
