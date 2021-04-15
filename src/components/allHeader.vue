@@ -42,7 +42,7 @@
             <div class="title">
               <div v-if="loginFlag==='true'">
                 <div class="tubiao">
-                  <img class="userImg" src="../assets/image/头像.png" alt="">
+                  <img class="userImg" src='http://zhihejiaoyu.cn/reveal/img/xiezuo8.png' alt="">
                 </div>
                 <user-popover  style="display: inline-block;"></user-popover>
               </div>
@@ -68,7 +68,8 @@
             name="user_name"
             type="text"
             auto-complete="on"
-            class="login_input"
+            class="login_input "
+            style="width: 90%"
             >
             <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
               <i class="iconfont iconyonghu"  style="color: white;"></i>
@@ -85,7 +86,8 @@
             name="password"
             show-password
             auto-complete="on"
-            class="login_input"
+            class="login_input "
+            style="width: 90%"
             >
             <template slot="prepend" class="login-icon">
               <i class="iconfont iconsuo"  style="color: white;"></i>
@@ -140,7 +142,8 @@
             name="user_name"
             type="text"
             auto-complete="on"
-            class="login_input"
+            class="login_input "
+            style="width: 90%"
           >
             <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
               <i class="iconfont iconyonghu"  style="color: white;"></i>
@@ -158,7 +161,8 @@
             name="password"
             show-password
             auto-complete="on"
-            class="login_input">
+            class="login_input "
+            style="width: 90%">
             <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
               <i class="iconfont iconsuo"  style="color: white;"></i>
             </template>
@@ -176,7 +180,8 @@
             name="user_name"
             type="text"
             auto-complete="on"
-            class="login_input"
+            class="login_input input_box"
+            style="width: 90%"
           >
             <template slot="prepend" class="login-icon" style="background-color:#ee7f60;">
               <i class="iconfont iconxuexiao"  style="color: white;"></i>
@@ -185,7 +190,7 @@
         </el-form-item>
 
         <el-form-item prop="gradeValue">
-          <el-select style="" v-model="gradeValue" placeholder="请选择年级" @change="showGrade">
+          <el-select style="" v-model="registerForm.gradeValue" placeholder="请选择年级" @change="showGrade">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -205,7 +210,8 @@
           ></el-input>
           <div class="ccode" @click="handleCodeR">{{rccode}}</div>
         </el-form-item >
-        <el-button v-model="register"  type="primary" class="login-button"  @click="checkForm">注册</el-button>
+        <el-button v-if="buttonShow" v-model="register"  type="primary" class="login-button"  @click="checkForm">注册</el-button>
+        <el-button v-else v-model="register"  type="primary" class="login-button"  style="background-color: gainsboro">注册</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -224,6 +230,7 @@ export default {
   components: {userPopover},
   data () {
     return {
+      buttonShow:false, // 注册按钮是否可用
       pwdLevel:0,
       // loginPwdLevel:0,
       // 注册
@@ -236,10 +243,8 @@ export default {
         ],
         password:[
           {
-            pattern: /^(\w){8,12}$/,
-            // pattern: /^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*).{7,16}$/,
-
-            message: "请同时具备字母、数字下划线的8-12位密码",
+            pattern: /^[0-9a-zA-Z]{8,12}$/,
+            message: "请同时具备大小写字母及数字的8-12位密码",
             trigger: 'change'
           },{
           required: true,
@@ -274,8 +279,8 @@ export default {
         ],
         password:[
           {
-            pattern: /^(\w){8,12}$/,
-            message: "密码为8-12位，且同时具备字母、数字和下划线",
+            pattern: /^[0-9a-zA-Z]{8,12}$/,
+            message: "密码为8-12位，且同时具备大小写字母、数字",
             trigger: 'change'
           },{
             required: true,
@@ -339,9 +344,10 @@ export default {
         user_name: '',
         password: '',
         school_name: '',
+        gradeValue: '',//选中的年级
         rvcode: '', // 注册，用户输入的验证码
       },
-      gradeValue: '',//选中的年级
+
       ableToRegister:false,
       username: localStorage.username,
       ccode: '', // 登录，验证码
@@ -349,18 +355,29 @@ export default {
     }
   },
   watch: {
-    // register(newName, oldName){
-    //   console.log("时刻被监视",newName)
-    //   var un = this.registerForm.user_name
-    //   var pd = this.registerForm.password
-    //   var sn = this.registerForm.school_name
-    //   var gv = this.gradeValue
-    //   if(un.length>0 & pd.length>0 & sn.length>0 & gv.length>0){
-    //     this.ableToRegister = true
-    //   }
-    //   return this.ableToRegister
-    // },
-     input3(newName, oldName) {
+    registerForm: {
+      handler(newName, oldName) {
+        console.log(this.registerForm)
+        if(this.registerForm.user_name.length>0&&this.registerForm.school_name.length>0&&this.registerForm.gradeValue.length>0&&this.registerForm.rvcode.length>0){
+          if(this.registerForm.password.length>=8 && this.pwdLevel === 3){
+            console.log("可以注册啦")
+            this.buttonShow = true
+          }
+          else {
+            console.log("密码不合格哦")
+            this.buttonShow = false
+            // this.$message("请同时具备大小写字母以及数字")
+          }
+        }
+        else {
+          console.log("表格不完整哦")
+          this.buttonShow = false
+        }
+      },
+      immediate: true,
+      deep:true,
+    },
+     input3(newName, oldName) { // 查询的内容
        localStorage.setItem("INPUT3",newName)
        console.log("watch到的input3",localStorage.getItem("INPUT3"))
      }
@@ -447,7 +464,7 @@ export default {
           name: this.registerForm.user_name,
           password: zcpwd,
           schoolname: this.registerForm.school_name,
-          nianji: this.gradeValue
+          nianji: this.registerForm.gradeValue
         }
         register(prams).then(response => {
           console.log('测试注册数据')
@@ -568,10 +585,10 @@ export default {
     // 生成登录界面的验证码
     generatedCode () {
       const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
       let code = ''
       for (let i = 0; i < 4; i++) {
-        let index = Math.floor(Math.random() * 36)
+        let index = Math.floor(Math.random() * 62)
         code += random[index]
       }
       this.ccode = code
@@ -579,10 +596,10 @@ export default {
     // 生成注册页面的验证码
     generatedCodeR () {
       const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
       let code = ''
       for (let i = 0; i < 4; i++) {
-        let index = Math.floor(Math.random() * 36)
+        let index = Math.floor(Math.random() * 62)
         code += random[index]
       }
       this.rccode = code
@@ -614,10 +631,10 @@ export default {
       }
         //console.log("checkCode") //校验验证码
         let vcode = this.loginForm.vcode
-        vcode = vcode.toUpperCase() //不区分大小写
+        // vcode = vcode.toUpperCase() //不区分大小写
         let ccode = this.ccode
-        ccode = ccode.toUpperCase()
-        if (vcode !== ccode) {
+        // ccode = ccode.toUpperCase()
+        if (vcode != ccode) {
           this.$message.error('请输入正确的验证码!')
           this.generatedCode()
           // this.$set(this.loginInfo, 'vcode', '')
@@ -632,10 +649,10 @@ export default {
     // 注册界面，判断验证码是否输入准确
     checkCodeR () {
       let rvcode = this.registerForm.rvcode
-      rvcode = rvcode.toUpperCase() //不区分大小写
+      // rvcode = rvcode.toUpperCase() //不区分大小写
       let rccode = this.rccode
-      rccode = rccode.toUpperCase()
-      if (rvcode !== rccode) {
+      // rccode = rccode.toUpperCase()
+      if (rvcode != rccode) {
         this.$message.error('请输入正确的验证码!')
         this.generatedCodeR()
       }else {
@@ -652,7 +669,7 @@ export default {
         this.$message("密码不符合要求")
       }else if(this.registerForm.school_name.length<=0){
         this.$message("学校名不能为空")
-      }else if(this.gradeValue.length<=0){
+      }else if(this.registerForm.gradeValue.length<=0){
         this.$message("请选择您所在的年级")
       }else if(this.registerForm.rvcode.length <=1){
         this.$message("请输入验证码")
@@ -665,9 +682,9 @@ export default {
     registerPwd () {
       var a= this.registerForm.password;
       console.log("输入框中值改变了",a)
-      var reg=/^[0-9]{1,12}$|^[a-zA-Z]{1,12}$/;    //全是数字或全是字母     6-16个字符
-      var reg1=/^[A-Za-z0-9]{1,12}$/;     //数字、26个英文字母      6-16个字符
-      var reg2=/^\w{1,12}$/;           // 由数字、26个英文字母或者下划线组成的字符串    6-16个字符
+      var reg=/^[0-9]{1,12}$|^[a-z]{1,12}$|^[A-Z]{1,12}$/;    //全是数字或全是字母     1-12个字符
+      var reg1=/^[A-Z0-9]{1,12}$|^[a-zA-Z]{1,12}$|^[a-z0-9]{1,12}$/;     //数字、26个英文字母      1-12个字符
+      var reg2=/^[A-Za-z0-9]{1,12}$/;           // 由数字、26个英文字母组成的字符串    1-12个字符
       if(a.match(reg)){
         this.pwdLevel = 1
       }
@@ -734,9 +751,6 @@ export default {
   .title{
     display: inline-block;
   }
-  /*.title span {*/
-  /*  display: inline-block;*/
-  /*}*/
   .el-main{
     /*background-color: #F5F5F5;*/
     /*margin-bottom: 20px;*/
@@ -800,7 +814,8 @@ export default {
   .login-button{
     width:100%;
     margin-bottom:30px;
-    background-color: #FF7533;border: 0;
+    background-color: #FF7533;
+    border: 0;
     font-size: 20px;
     letter-spacing: 0.3em;
   }
@@ -814,6 +829,9 @@ export default {
     padding: 0 0  0 20px;
     width:100vw;
   }
+  .input-with-select .el-input-group__prepend{
+    background-color: #ffffff;
+  }
   .login_input .el-input-group__prepend {
     background-color: #ee7f60;
     padding: 0 15px;
@@ -826,7 +844,7 @@ export default {
     color: #ee7f60;
     background-color: #fff;
     font-size: 14px;
-    border: 1px solid #ee7f60;
+    border: 1px solid #ee7f60 !important;
   }
   .el-select .el-input .el-select__caret {
     color: #ee7f60;
@@ -834,10 +852,8 @@ export default {
   .el-input-group .el-input__inner {
     border: 1px solid #ee7f60;
   }
-  .el-input{
-    width: 92%;
-  }
-  .el-dialog__body{
+
+  .el-dialog .el-dialog__body{
     text-align: left;
   }
   .loginUp-dialog{ /* 弹框 */
