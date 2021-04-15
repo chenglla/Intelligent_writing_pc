@@ -140,9 +140,9 @@ export default {
     	  // console.log('距离顶部高度',this.$refs.pronbit.getBoundingClientRect().top)
         this.scrollHeigh = this.$refs.pronbit.getBoundingClientRect().top
         if(this.scrollHeigh < -460){
-           document.getElementById("hot_right").style.marginTop='10px'
-           document.getElementById("hot_right").style.position='fixed'
-           document.getElementById("hot_right").style.width='17vw'
+           document.getElementById('hot_right').style.marginTop='10px'
+           document.getElementById('hot_right').style.position='fixed'
+           document.getElementById('hot_right').style.width='17vw'
           // document.getElementById("hot_right").style.backgroundColor="red"
            console.log("我运行了")
         }else{
@@ -296,7 +296,9 @@ export default {
   }
 </style>
 <style>
-  .el-scrollbar__wrap{
-    overflow-x: hidden;
+  .article .el-scrollbar__wrap{
+    /*overflow: hidden;*/
+    overflow-x: hidden ;
+    overflow-y: scroll ;
   }
 </style>
