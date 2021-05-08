@@ -51,7 +51,8 @@ export function intelligentMeasurement (parems) {
 }
 export function intelligentMeasurement2 (parems) {
   return request({
-    url: '/essay/plat/autoscoring2',
+    //url: '/essay/plat/autoscoring2',
+    url: '/plat/autoscoring2',
     // url: '/zihui/essay/plat/autoscoring2',
     method: 'post',
     data: parems

@@ -6,13 +6,14 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
- import md5 from 'js-md5'
+import axios from 'axios'
+import md5 from 'js-md5'
 import JsEncrypt from 'jsencrypt' // 采用RSA加密的方式
 
- Vue.prototype.$md5 = md5
+Vue.prototype.$md5 = md5
 Vue.prototype.$qs = qs
 Vue.config.productionTip = false
-
+Vue.prototype.$axios = axios
 
 Vue.prototype.$encruption = function (obj) {
   let encrypt = new JsEncrypt()

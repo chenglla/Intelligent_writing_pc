@@ -52,8 +52,9 @@
                 title="提示：请按照先带有标题页，再是作文页的顺序进行上传"
                 :visible.sync="dialogVisible1"
                 width="40%">
+                <!--                  action="http://114.242.223.253/zihui/essay/fileUpload"-->
                 <el-upload
-                  action="http://114.242.223.253/zihui/essay/fileUpload"
+                  action="http://47.104.223.129/zihui/essay/fileUpload"
                   list-type="picture-card"
                   name="file"
                   :before-upload="beforeUpload"
@@ -63,15 +64,15 @@
                   :on-error="handleError"
 
                 >
-                  <i class="iconfont icontupianshangchuan"></i>
+                  <!-- <i class="iconfont icontupianshangchuan"></i> -->
                 </el-upload>
                 <el-dialog :visible.sync="dialogVisible2" append-to-body>
                   <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
-                <span slot="footer" class="dialog-footer">
+                <div slot="footer" class="dialog-footer" style="text-align: center">
                   <!-- <el-button @click="dialogVisible1 = false">取 消</el-button> -->
-                  <el-button class="pictureUpload" type="primary"  @click="subimg" >确 定</el-button>
-                </span>
+                  <el-button class="pictureUpload" style="text-align: center" type="primary"  @click="subimg" >确 定</el-button>
+                </div>
               </el-dialog>
               <el-row>
                 <el-col :span="2">
@@ -127,16 +128,16 @@
             <div class="model_picture" >
               <div class="piture-title" >作文模板</div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板无.png" alt="" @click="changeBackground(0)">
+                <img class="backPicture" src='http://zhihejiaoyu.cn/reveal/img/xiezuo4.png' alt="" @click="changeBackground(0)">
               </div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板1.png" alt="" @click="changeBackground(1)">
+                <img class="backPicture" src='http://zhihejiaoyu.cn/reveal/img/xiezuo5.png' alt="" @click="changeBackground(1)">
               </div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板2.png" alt="" @click="changeBackground(2)">
+                <img class="backPicture" src='http://zhihejiaoyu.cn/reveal/img/xiezuo6.png' alt="" @click="changeBackground(2)">
               </div>
               <div>
-                <img class="backPicture" src="../assets/image/作文模板3.png" alt="" @click="changeBackground(3)">
+                <img class="backPicture" src='http://zhihejiaoyu.cn/reveal/img/xiezuo7.png' alt="" @click="changeBackground(3)">
               </div>
             </div>
           </el-aside>
@@ -155,8 +156,9 @@
     <el-dialog
       title="智能评测结果"
       :visible.sync="dialogVisible"
-      width="30%">
-      <span slot="footer" class="dialog-footer">
+      width="30%"
+      style="text-align: center">
+      <span slot="footer" class="dialog-footer" style="text-align: center">
         <el-button @click="dialogVisible = false">关闭</el-button>
         <el-button type="primary" @click="gotoPage" style="background-color: #ee7f60;">查看评测结果</el-button>
       </span>
@@ -536,7 +538,6 @@ export default {
   .model_picture{ /* 侧边外框 */
     position: relative;
     top: 100px;
-    background-color: green;
     background-color: white;
     border: 1px solid #CCCCCC;
     text-align: center;

@@ -45,7 +45,6 @@
                   <img class="userImg" src='http://zhihejiaoyu.cn/reveal/img/xiezuo8.png' alt="">
                 </div>
                 <user-popover  style="display: inline-block;"></user-popover>
-                <span  style="cursor: pointer" @click="gotoPing">资源云平台</span>
               </div>
               <div v-else>
                 <div class="tubiao">
@@ -191,7 +190,7 @@
         </el-form-item>
 
         <el-form-item prop="gradeValue">
-          <el-select style="" v-model="registerForm.gradeValue" placeholder="请选择年级" @change="showGrade">
+          <el-select style="" v-model="gradeValue" placeholder="请选择年级" @change="showGrade">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -211,8 +210,7 @@
           ></el-input>
           <div class="ccode" @click="handleCodeR">{{rccode}}</div>
         </el-form-item >
-        <el-button v-if="buttonShow" v-model="register"  type="primary" class="login-button"  @click="checkForm">注册</el-button>
-        <el-button v-else v-model="register"  type="primary" class="login-button"  style="background-color: gainsboro">注册</el-button>
+        <el-button v-model="register"  type="primary" class="login-button"  @click="checkForm">注册</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -231,7 +229,6 @@ export default {
   components: {userPopover},
   data () {
     return {
-      buttonShow:false, // 注册按钮是否可用
       pwdLevel:0,
       // loginPwdLevel:0,
       // 注册
@@ -345,10 +342,9 @@ export default {
         user_name: '',
         password: '',
         school_name: '',
-        gradeValue: '',//选中的年级
         rvcode: '', // 注册，用户输入的验证码
       },
-
+      gradeValue: '',//选中的年级
       ableToRegister:false,
       username: localStorage.username,
       ccode: '', // 登录，验证码
@@ -356,28 +352,17 @@ export default {
     }
   },
   watch: {
-    registerForm: {
-      handler(newName, oldName) {
-        console.log(this.registerForm)
-        if(this.registerForm.user_name.length>0&&this.registerForm.school_name.length>0&&this.registerForm.gradeValue.length>0&&this.registerForm.rvcode.length>0){
-          if(this.registerForm.password.length>=8 && this.pwdLevel === 3){
-            console.log("可以注册啦")
-            this.buttonShow = true
-          }
-          else {
-            console.log("密码不合格哦")
-            this.buttonShow = false
-            // this.$message("请同时具备大小写字母以及数字")
-          }
-        }
-        else {
-          console.log("表格不完整哦")
-          this.buttonShow = false
-        }
-      },
-      immediate: true,
-      deep:true,
-    },
+    // register(newName, oldName){
+    //   console.log("时刻被监视",newName)
+    //   var un = this.registerForm.user_name
+    //   var pd = this.registerForm.password
+    //   var sn = this.registerForm.school_name
+    //   var gv = this.gradeValue
+    //   if(un.length>0 & pd.length>0 & sn.length>0 & gv.length>0){
+    //     this.ableToRegister = true
+    //   }
+    //   return this.ableToRegister
+    // },
      input3(newName, oldName) { // 查询的内容
        localStorage.setItem("INPUT3",newName)
        console.log("watch到的input3",localStorage.getItem("INPUT3"))
@@ -418,10 +403,7 @@ export default {
       this.$emit('selectWord', this.input3)
       // localStorage.setItem("SELECT_WORD",this.input3)
     },
-    gotoPing () { // 跳转资源云平台
-      console.log('userId: ', localStorage.getItem('userId'))
-      window.location.href = 'http://58.119.112.14:11013?userId=1'
-    },
+
     beginRegistered: function () {
       //console.log('开始注册')
       this.showDialogTwo = true
@@ -468,48 +450,16 @@ export default {
           name: this.registerForm.user_name,
           password: zcpwd,
           schoolname: this.registerForm.school_name,
-          nianji: this.registerForm.gradeValue
+          nianji: this.gradeValue
         }
-        var url = `http://211.86.56.184:443/zihui/Login/register?name=${prams.name}&password=${zcpwd}&nianji=${prams.nianji}&schoolname=${prams.schoolname}`
-        // var url = `http://58.119.112.14:11020/cms/login?username=${localStorage.getItem("USERNAME")}&password=${localStorage.getItem("PASSWORD")}`
-        this.$axios.post(url).then((res) => {
-          console.log('register:', res.data)
-
-          // if (res.data.code === 200) {
-          //
-          //   this.$message.success('登录成功！')
-          //   localStorage.setItem('flag_class', '已登录')
-          //   localStorage.setItem('userId', res.data.userid)
-          //   localStorage.setItem('role', res.data.role)
-          //   localStorage.setItem('name', res.data.username)
-          //   localStorage.setItem('token', res.data.token)
-          //   // localStorage.setItem('schoolname', this.ruleForm2.class_name)
-          //   localStorage.setItem('password', dlpwd)
-          //   this.loginFlag = 'true'
-          //   localStorage.setItem("LOGINFLAG",true)
-          //   this.showDialog = false
-          //   this.username = localStorage.username
-          //   console.log("登录后的token是", localStorage.getItem('token'))
-          //   this.$router.push('/')
-          //   // this.$router.push({
-          //   //   path: '/',
-          //   //   query: {
-          //   //     flag_class: 'yidenglu'
-          //   //   }
-          //   // })
-          // } else {
-          //   console.log('是打发放到')
-          //   // this.$message.error(res.data.message)
-          // }
+        register(prams).then(response => {
+          console.log('测试注册数据')
+          console.log(response.data)
+          this.$message({
+            message: '恭喜你，注册成功 请登录',
+            type: 'success'
+          })
         })
-        // register(prams).then(response => {
-        //   console.log('测试注册数据')
-        //   console.log(response.data)
-        //   this.$message({
-        //     message: '恭喜你，注册成功 请登录',
-        //     type: 'success'
-        //   })
-        // })
         this.showDialogTwo = false
       }
     },
@@ -572,81 +522,44 @@ export default {
       // this.loginFlag = '是'
       // // alert('登录成功')
       // this.showDialog = false
-      var dlpwd = this.$encruption(localStorage.getItem("PASSWORD")) //经过RSA加密之后的密码
-     //var dlpwd = localStorage.getItem("PASSWORD") //未经过加密的密码
+       var dlpwd = this.$encruption(localStorage.getItem("PASSWORD")) //经过RSA加密之后的密码
+      //var dlpwd = localStorage.getItem("PASSWORD") //未经过加密的密码
       // var dlpwd = this.$md5('localStorage.getItem("PASSWORD")')//经过md5加密的密码
       console.log("加密之后的用户名",dlpwd)
       const prams = {
         username: localStorage.getItem("USERNAME"),
         password: dlpwd
       }
-      if (localStorage.getItem("USERNAME") === '' || dlpwd === '') {
-        this.$message.warning('请输入用户名或密码！')
-      } else {
-        //var url = 'https://www.zhongkeruitong.top/towerImg/cms/user/login?username=' + this.ruleForm1.username + '&password=' + this.ruleForm1.password
-        var url = `http://211.86.56.184:443/zihui/Login/login?username=${prams.username}&password=${dlpwd}`
-        // var url = `http://58.119.112.14:11020/cms/login?username=${localStorage.getItem("USERNAME")}&password=${localStorage.getItem("PASSWORD")}`
-        this.$axios.post(url).then((res) => {
-          console.log('444', res.data)
-
-          if (res.data.code === 200) {
-
-            this.$message.success('登录成功！')
-            localStorage.setItem('flag_class', '已登录')
-            localStorage.setItem('userId', res.data.userid)
-            localStorage.setItem('role', res.data.role)
-            localStorage.setItem('name', res.data.username)
-            localStorage.setItem('token', res.data.token)
-            // localStorage.setItem('schoolname', this.ruleForm2.class_name)
-            localStorage.setItem('password', dlpwd)
-            this.loginFlag = 'true'
-            localStorage.setItem("LOGINFLAG",true)
-            this.showDialog = false
-            this.username = localStorage.username
-            console.log("登录后的token是", localStorage.getItem('token'))
-            this.$router.push('/')
-            // this.$router.push({
-            //   path: '/',
-            //   query: {
-            //     flag_class: 'yidenglu'
-            //   }
-            // })
-          } else {
-            console.log('是打发放到')
-            // this.$message.error(res.data.message)
+      login(prams).then(respone => {
+        //localStorage.clear()
+        if (respone.data.code === 0) {
+          localStorage.setItem('username', respone.data.data)
+          //console.log("username",localStorage.getItem('username'))
+          this.$message({
+            message: '登录成功',
+            type: 'success',
+            duration: 5000
+          })
+          this.loginFlag = 'true'
+          localStorage.setItem("LOGINFLAG",true)
+          // alert('登录成功')
+          this.showDialog = false
+          this.username = localStorage.username
+          const prams = {
+            page: 1,
+            user: this.username
           }
-        })
-      }
-      // login(prams).then(respone => {
-      //   //localStorage.clear()
-      //   if (respone.data.code === 0) {
-      //     localStorage.setItem('username', respone.data.data)
-      //     //console.log("username",localStorage.getItem('username'))
-      //     this.$message({
-      //       message: '登录成功',
-      //       type: 'success',
-      //       duration: 5000
-      //     })
-      //     this.loginFlag = 'true'
-      //     localStorage.setItem("LOGINFLAG",true)
-      //     // alert('登录成功')
-      //     this.showDialog = false
-      //     this.username = localStorage.username
-      //     const prams = {
-      //       page: 1,
-      //       user: this.username
-      //     }
-      //     getCompositionListData(prams).then(respone => {
-      //       this.fatherData = respone.data.data
-      //       //console.log('输出要传给子组件显示的作文数据')
-      //       //console.log(this.fatherData)
-      //       this.$refs.child.handleCurrentChange(1)
-      //       this.reload()
-      //     })
-      //   } else {
-      //     this.$message.error('用户名或密码错误！')
-      //   }
-      // })
+          getCompositionListData(prams).then(respone => {
+            this.fatherData = respone.data.data
+            //console.log('输出要传给子组件显示的作文数据')
+            //console.log(this.fatherData)
+            this.$refs.child.handleCurrentChange(1)
+            this.reload()
+          })
+        } else {
+          this.$message.error('用户名或密码错误！')
+        }
+      })
     },
     // 点击生成验证码
     handleCode () {
@@ -742,7 +655,7 @@ export default {
         this.$message("密码不符合要求")
       }else if(this.registerForm.school_name.length<=0){
         this.$message("学校名不能为空")
-      }else if(this.registerForm.gradeValue.length<=0){
+      }else if(this.gradeValue.length<=0){
         this.$message("请选择您所在的年级")
       }else if(this.registerForm.rvcode.length <=1){
         this.$message("请输入验证码")

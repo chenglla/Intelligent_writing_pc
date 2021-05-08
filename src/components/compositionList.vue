@@ -631,10 +631,11 @@ export default {
   }
   .label_item {
     padding: 5px 15px;
-    line-height: 30px;
+    line-height: 20px;
     font-size: 15px;
     color: #666;
     border: 1px solid #e9e9eb;
+    border-radius: 4px;
     background-color: #f4f4f5;
     display: inline-block;
     /*line-height: 32px;*/

@@ -6,7 +6,7 @@
         <span class="shouye" @click="goBack()">首页</span>
         >{{currentType}}
       </div>
-      <img src="../assets/image/book.png" alt="">
+      <img src="http://zhihejiaoyu.cn/reveal/img/xiezuo9.png" alt="">
       <div class="more_second_content">
         <div class="second_left second_book">
           <div v-for="(item, index) in dataTypeList" :key="index" class="content_item">
