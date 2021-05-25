@@ -182,7 +182,7 @@ export default {
       //   url1:'../assets/image/作文模板无.png'
       // },],
       dialogVisible: false,
-      username: localStorage.getItem('username'),
+      username: localStorage.getItem('name'),
       logo: logo,
       textarea1: '',
       textarea2: '',
@@ -237,10 +237,10 @@ export default {
         }
         this.loading = true
         intelligentMeasurement2(prames).then(respone => {
-          this.measureData = respone.data.data
-          this.dialogData = this.measureData.tags
-          this.tuijianData = respone.data.data.passage
-          console.log(this.tuijianData)
+          // this.measureData = respone.data.data
+          // this.dialogData = this.measureData.tags
+          // this.tuijianData = respone.data.data.passage
+          // console.log(this.tuijianData)
           this.tuijianFlag = true
           this.dialogVisible = true
           this.loading = false

@@ -578,32 +578,33 @@ export default {
       console.log("加密之后的用户名",dlpwd)
       const prams = {
         username: localStorage.getItem("USERNAME"),
-        password: dlpwd
+        password: localStorage.getItem("PASSWORD")
+        // password: dlpwd
       }
-      if (localStorage.getItem("USERNAME") === '' || dlpwd === '') {
+      if (localStorage.getItem("USERNAME") === '' || localStorage.getItem("PASSWORD") === '') {
+      // if (localStorage.getItem("USERNAME") === '' || dlpwd === '') {
         this.$message.warning('请输入用户名或密码！')
       } else {
         //var url = 'https://www.zhongkeruitong.top/towerImg/cms/user/login?username=' + this.ruleForm1.username + '&password=' + this.ruleForm1.password
-        var url = `http://211.86.56.184:443/zihui/Login/login?username=${prams.username}&password=${dlpwd}`
+        var url = `http://211.86.56.184:443/zihui/Login/login?username=${prams.username}&password=${prams.password}`
         // var url = `http://58.119.112.14:11020/cms/login?username=${localStorage.getItem("USERNAME")}&password=${localStorage.getItem("PASSWORD")}`
         this.$axios.post(url).then((res) => {
           console.log('444', res.data)
 
           if (res.data.code === 200) {
-
             this.$message.success('登录成功！')
             localStorage.setItem('flag_class', '已登录')
             localStorage.setItem('userId', res.data.userid)
-            localStorage.setItem('role', res.data.role)
+            localStorage.setItem('role', res.data.role) // 0是普通  1是管理员
             localStorage.setItem('name', res.data.username)
             localStorage.setItem('token', res.data.token)
             // localStorage.setItem('schoolname', this.ruleForm2.class_name)
             localStorage.setItem('password', dlpwd)
             this.loginFlag = 'true'
-            localStorage.setItem("LOGINFLAG",true)
+            localStorage.setItem('LOGINFLAG', true)
             this.showDialog = false
             this.username = localStorage.username
-            console.log("登录后的token是", localStorage.getItem('token'))
+            console.log('登录后的token是', localStorage.getItem('token'))
             this.$router.push('/')
             // this.$router.push({
             //   path: '/',
