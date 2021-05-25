@@ -110,6 +110,10 @@
           </el-main>
           <el-aside width="30%" style="padding-top:20px;">
             <el-card style="min-height: 300px" >
+              <div class="scoreStandard" @click="gotoSee">
+                <i class="iconfont iconxiugai"></i>
+                作文评分标准
+              </div>
               <div style="padding: 10px">
                 <div style="margin-bottom: 20px;display: inline-block;" >
                   <i class="iconfont icon-jiangbei" ></i>
@@ -171,6 +175,103 @@
         </div>
       </el-footer>
     </el-container>
+    <el-dialog
+      title="评分标准"
+      :visible.sync="showStandard"
+      width="50%"
+      class="standardDialog"
+      :before-close="handleClose">
+      <div>
+        <table class="standardTable" cellspacing="10">
+          <thead>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>得分说明</td>
+              <td>评分</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="8" class="oneOne oneItem">基础</td>
+              <td rowspan="5" class="oneTwo oneItem">内容</td>
+              <td class="oneThree oneItem">符合题意</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+              <td class="oneThree oneItem">中心突出</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">内容充实</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">思想健康</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">感情真挚</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+              <td rowspan="3" class="oneTwo oneItem">表达</td>
+              <td class="oneThree oneItem">符合文体要求</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">结构严谨</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">语言流畅</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+              <td rowspan="3" class="oneOne oneItem">发展</td>
+              <td rowspan="3" class="oneTwo oneItem">特征</td>
+              <td class="oneThree oneItem">深刻</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">丰富</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">有文采</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="gotoRelease" class="releaseItem">发布</el-button>
+<!--    <el-button type="primary" @click="showStandard = false">确 定</el-button>-->
+  </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -199,7 +300,8 @@ export default {
       tag: '',
       parallel: [],
       tags: [],
-      fullscreenLoading: true
+      fullscreenLoading: true,
+      showStandard: false,
     }
   },
   mounted () {
@@ -260,6 +362,19 @@ export default {
     //标签页点击更换页面
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    gotoSee() { // 查看作文评分标准
+      this.showStandard = true
+    },
+    gotoRelease () { // 教师发布
+      console.log('发布成功！')
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     },
     getData () {
       const prames = {
@@ -332,13 +447,30 @@ export default {
   }
   .artType{
     color: white;
-    font-weight: blod;
+    font-weight: bold;
     font-size: 10px;
     letter-spacing: 2px;
     margin-bottom: 20px;
     float: right;
     background: linear-gradient(to right ,#FE7655,#FF9972);
     padding: 4px 16px;
+  }
+  .scoreStandard {
+    font-size: 1.1rem;
+    width: 66%;
+    margin-left: 17%;
+    text-align: center;
+    color: white;
+    background: linear-gradient(to right ,#FE7655,#FF9972);
+    padding: 15px 16px;
+    border-radius: 10px;
+    letter-spacing: 5px;
+    font-weight: bold;
+    margin-bottom: 2vh;
+  }
+  .scoreStandard .iconfont {
+    font-size: 1.2rem;
+    font-weight: normal;
   }
   .copyrightContainer{
     padding-top: 20px;
@@ -433,7 +565,71 @@ export default {
   /* .el-card__body div{
     padding: 40px 6px !important;
   } */
+.standardTable {
+  width: 100%;
+  text-align: center;
+}
+.oneItem {
+  border-radius: 3px;
+  color: white;
+  padding: 7px;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
+  font-size: 0.9rem;
+}
+  .oneOne {
+    width: 10%;
+    /*color: white;*/
+    background: rgb(219, 101, 37);
+    font-size: 1.1rem;
+    /*letter-spacing: 0.1rem;*/
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneTwo {
+    width: 10%;
+    /*color: white;*/
+    background: rgb(239, 130, 49);
+    font-size: 1.1rem;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneThree {
+    width: 20%;
+    background: rgb(250, 174, 118);
+    font-size: 0.96rem;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneFour {
+    width: 40%;
+    background: rgb(251, 237, 226);
+    color: #3c3c3c;
+    font-weight: normal;
+    letter-spacing: unset;
+    font-size: unset;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneFive {
+    width: 20%;
+    background: rgb(251, 237, 226);
+    color: #3c3c3c;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .releaseItem {
+     font-size: 1.1rem;
+     width: 40%;
+     /*margin-left: 30%;*/
+     /*margin-top: 2vh;*/
+     text-align: center;
+     color: white;
+     background: linear-gradient(to right ,#FE7655,#FF9972);
+     padding: 15px 16px;
+     border-radius: 30px;
+     letter-spacing: 5px;
+     font-weight: bold;
+     margin-bottom: 2vh;
+   }
+.standardDialog /deep/ .el-dialog__footer{
+  text-align: center;
+}
 </style>
 <style>
-
 </style>
