@@ -110,6 +110,10 @@
           </el-main>
           <el-aside width="30%" style="padding-top:20px;">
             <el-card style="min-height: 300px" >
+              <div class="scoreStandard" @click="gotoSee">
+                <i class="iconfont iconxiugai"></i>
+                作文评分标准
+              </div>
               <div style="padding: 10px">
                 <div style="margin-bottom: 20px;display: inline-block;" >
                   <i class="iconfont icon-jiangbei" ></i>
@@ -171,6 +175,122 @@
         </div>
       </el-footer>
     </el-container>
+    <el-dialog
+      title="评分标准"
+      :visible.sync="showStandard"
+      width="50%"
+      class="standardDialog"
+      :before-close="handleClose">
+      <div>
+        <table class="standardTable" cellspacing="10">
+          <thead>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>得分说明</td>
+              <td>评分</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="8" class="oneOne oneItem">基础</td>
+              <td rowspan="5" class="oneTwo oneItem">内容</td>
+              <td class="oneThree oneItem">符合题意</td>
+<!--              <td class="oneFour oneItem" v-if="role === 0">得分说明xxxxxxxxxx</td>-->
+<!--              <td class="oneFour oneItem" v-else-if="role === 1">-->
+<!--                得分说明xxxxxxxxxx-->
+<!--                <i class="iconfont iconxiugai07"></i>-->
+<!--              </td>-->
+<!--              <td class="oneFour oneItem" v-else>-->
+<!--                <input type="text" v-model="oneFill" @input="oneChange('00')" name="shuoming" style="border:none;outline: none;background-color: transparent;"/>-->
+<!--                <i class="iconfont iconxiugai07"></i>-->
+<!--              </td>-->
+              <td class="oneFour oneItem">
+                <div class="flex-item">
+                  <input type="text" v-model="oneFill" @input="oneChange('00')" name="shuoming" style="border:none;outline: none;background-color: transparent;"/>
+                  <i class="iconfont iconxiugai07"></i>
+                </div>
+              </td>
+              <td class="oneFive oneItem">
+                <div class="flex-item">
+                  <input type="text" v-model="oneScore" @input="oneChange('01')" name="oneScore" style="border:none;outline: none;background-color: transparent;display: inline"/>
+                  <i class="iconfont iconxiugai07"></i>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="oneThree oneItem">中心突出</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">内容充实</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">思想健康</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">感情真挚</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+              <td rowspan="3" class="oneTwo oneItem">表达</td>
+              <td class="oneThree oneItem">符合文体要求</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">结构严谨</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">语言流畅</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+              <td rowspan="3" class="oneOne oneItem">发展</td>
+              <td rowspan="3" class="oneTwo oneItem">特征</td>
+              <td class="oneThree oneItem">深刻</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">丰富</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+            <tr>
+<!--              <td>1</td>-->
+<!--              <td>1</td>-->
+              <td class="oneThree oneItem">有文采</td>
+              <td class="oneFour oneItem">得分说明xxxxxxxxxx</td>
+              <td class="oneFive oneItem">1</td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="gotoRelease" class="releaseItem">发布</el-button>
+<!--    <el-button type="primary" @click="showStandard = false">确 定</el-button>-->
+  </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -184,13 +304,13 @@ export default {
   data () {
     return {
       // 作为分数
-      score1:0,
+      score1: 0,
       // 符合题意分数
-      score2:0,
+      score2: 0,
       // 首段分数
-      header_score:[],
+      header_score: [],
       // 全文句子分数
-      fluency:[],
+      fluency: [],
       logo: logo,
       title: '',
       passage: '',
@@ -199,8 +319,16 @@ export default {
       tag: '',
       parallel: [],
       tags: [],
-      fullscreenLoading: true
+      fullscreenLoading: true,
+      showStandard: false,
+      role: -1,
+      oneFill: '得分说明xxxxxxxxxx',
+      oneScore: 0,
+      timeId: -1
     }
+  },
+  created () {
+    this.role = localStorage.role
   },
   mounted () {
     // this.title = this.$route.query.title
@@ -213,6 +341,12 @@ export default {
     this.essayevaluate()
   },
   methods: {
+    oneChange (index) {
+      clearTimeout(this.timeId)
+      this.timeId = setTimeout(() => {
+        console.log('dsafsdfs', index)
+      }, 1000)
+    },
     essayevaluate () {
       var strtitle = '标题'
       var str = '每个人都有梦想，“它”是人类所向往的，今天的我们正处于花季少年之时，一天天的生活如流水般消逝在我们脑海中往事一件件，回忆，如漫天里的星星一般在我们的脑海中不时闪耀，谁说90后的孩子是为了生存而活，而大多数都是为了梦想而活，而没有梦想的人生是空虚的，但梦想总是随着思想的前进而改变的。我的梦想就是当一名医生。医生是治愈病人，让他们恢复健康，幸福生活的人，他们是与死神抗争的人，是为人类生命健康做贡献的人。医生用非常敬业的精神为病人减轻伤痛，救死扶伤，在病人失去光明、暗无天日的世界里托起一颗充满光芒、温暖、希望的太阳，是他们黑暗路上的一盏明亮的灯光，是他们寒冷夜里的温暖的火炉，是在他们处于绝境时伸出的一双援助之手。每年都有数以万计的人死于癌症和一些极为罕见的疾病，这些病例有些却因无法找到合适的医术治疗而耽误医治的时间失去了生命，有些则因为没有较好的方法去治疗而导致自己的一生都要受病魔的折磨。例如，湖北有一个男婴，一生下来就有好几种疾病，然而这些疾病有是非常棘手的难题。如果动手术则很有可能会引发生命危险，但是不动手术的话，这么幼小的生命却支撑不了多久，就会慢慢朝着死神的地方走去。却在大家犹豫不决的时候，几天后，因为耽误了及时的治疗时间，这个小生命就永远地离开了人世。再如，发生在陕西省延川县一个贫穷的家里的事件：一个小女孩出生到两年内就已经莫名其妙地骨折8次了，她的父母就带他去医院检查，结果发现，原来这是一种极难治疗而又需长期的观察的罕见疾病——成骨不全症。这个消息让这一家人心中的一丝希望都破灭了，因为，目前还没有能够较好地治疗这种疾病的方法。所以，他们只能眼睁睁地看着自己可怜的女儿受痛苦和折磨一辈子。在看完这些令人惋惜伤感的事件后，我的心中难以平静，就有想要当一名能够研究罕见疾病病因，治疗罕见疾病患者的医生的冲动和想法。如果我能知道这些病因的治疗方法，那我能在生死边缘抢回多少条生命啊！就能够让重新得到健康的人幸福快乐地生活，让为他担心的人得以放心，让他们不再充满对病魔的恐惧！想当一名医生，需要的是知识、爱心还有决心、勇气和毅力。所以，就应该认真读书，培养高尚的品德修养，锻炼顽强的意志力和不畏困难的勇气，从现在做起，用行动证明一切，用时间来检验结果。长大后，我要做一个敬职敬业的医生，真心为人们治病，而不是为了所谓的利益却弄虚作假，拿生命做赌注假如没有了梦想，人生就会特别的冷清，没有活力。有了梦想，也就有了动力，它会催人前进。也许在实现梦想的道路上会遇到无数次的坎坷与挫折。但没关系，跌倒了自己再爬起来，为了自己的梦想而努力前进。毕竟是自己的梦想，相信自己未来是自己创造的，相信会有奇迹在等着我们。所以我们要用最真的自我，寻找最真的目标，实现最真的梦想。'
@@ -261,6 +395,19 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
+    gotoSee() { // 查看作文评分标准
+      this.showStandard = true
+    },
+    gotoRelease () { // 教师发布
+      console.log('发布成功！')
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    },
     getData () {
       const prames = {
         title: this.title,
@@ -272,13 +419,13 @@ export default {
 
       }
       intelligentMeasurement2(prames).then((res) => {
-        this.content = res.data.data.content
-        this.tag = res.data.data.tags[1]
-        this.tags = res.data.data.tags
+        // this.content = res.data.data.content
+        // this.tag = res.data.data.tags[1]
+        // this.tags = res.data.data.tags
         //截取成绩，保留小数点后两位
-        this.tags[4] = this.tags[4].toFixed(2)
+        // this.tags[4] = this.tags[4].toFixed(2)
         //console.log('4',this.tags[4])
-        this.parallel = res.data.data.parallel
+        // this.parallel = res.data.data.parallel
         this.fullscreenLoading = false
       })
     }
@@ -332,13 +479,30 @@ export default {
   }
   .artType{
     color: white;
-    font-weight: blod;
+    font-weight: bold;
     font-size: 10px;
     letter-spacing: 2px;
     margin-bottom: 20px;
     float: right;
     background: linear-gradient(to right ,#FE7655,#FF9972);
     padding: 4px 16px;
+  }
+  .scoreStandard {
+    font-size: 1.1rem;
+    width: 66%;
+    margin-left: 17%;
+    text-align: center;
+    color: white;
+    background: linear-gradient(to right ,#FE7655,#FF9972);
+    padding: 15px 16px;
+    border-radius: 10px;
+    letter-spacing: 5px;
+    font-weight: bold;
+    margin-bottom: 2vh;
+  }
+  .scoreStandard .iconfont {
+    font-size: 1.2rem;
+    font-weight: normal;
   }
   .copyrightContainer{
     padding-top: 20px;
@@ -433,7 +597,97 @@ export default {
   /* .el-card__body div{
     padding: 40px 6px !important;
   } */
+.standardTable {
+  width: 100%;
+  text-align: center;
+}
+.oneItem {
+  border-radius: 3px;
+  color: white;
+  padding: 7px;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
+  font-size: 0.9rem;
+  /*display: flex;*/
+  /*clear: both;*/
+  /*display: inline-block;*/
+}
+.oneItem inout {
+  flex: 5;
+}
+.oneItem i {
+  flex: 1;
+}
+  .oneOne {
+    width: 10%;
+    /*color: white;*/
+    background: rgb(219, 101, 37);
+    font-size: 1.1rem;
+    /*letter-spacing: 0.1rem;*/
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneTwo {
+    width: 10%;
+    /*color: white;*/
+    background: rgb(239, 130, 49);
+    font-size: 1.1rem;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneThree {
+    width: 20%;
+    background: rgb(250, 174, 118);
+    font-size: 0.96rem;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneFour {
+    width: 40%;
+    background: rgb(251, 237, 226);
+    color: #3c3c3c;
+    font-weight: normal;
+    letter-spacing: unset;
+    font-size: unset;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .oneFive {
+    width: 20%;
+    background: rgb(251, 237, 226);
+    color: #3c3c3c;
+    /*background: linear-gradient(to right ,#FE7655,#FF9972);*/
+  }
+  .releaseItem {
+     font-size: 1.1rem;
+     width: 40%;
+     /*margin-left: 30%;*/
+     /*margin-top: 2vh;*/
+     text-align: center;
+     color: white;
+     background: linear-gradient(to right ,#FE7655,#FF9972);
+     padding: 15px 16px;
+     border-radius: 30px;
+     letter-spacing: 5px;
+     font-weight: bold;
+     margin-bottom: 2vh;
+   }
+.standardDialog /deep/ .el-dialog__footer{
+  text-align: center;
+}
+  .iconxiugai07 {
+    /*float: right;*/
+    /*display: inline-block;*/
+    color: rgb(204, 89, 39);
+    font-weight: bold;
+  }
+  .flex-item {
+    display: flex;
+  }
+  .flex-item input {
+    flex: 5;
+    /*display: flex;*/
+    text-align: center;
+  }
+  .flex-item i {
+    flex: 1;
+  }
 </style>
 <style>
-
 </style>
