@@ -51,7 +51,7 @@
 
 <script>
 import {getRecommandListData} from '@/api/getCompositionData'
-import dateFormat from '../assets/js/Date'
+import dateFormat from '@/assets/js/Date'
 export default {
   name: 'searchSection',
   data () {

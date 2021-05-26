@@ -321,7 +321,7 @@ import { setCookie, getCookie, clearCookie } from "../utils/user.js";
 import { login } from "@/api/login";
 import { register } from "@/api/register";
 import logo from "@/assets/image/logo.png";
-import userPopover from "@/components/user/userPopover";
+import userPopover from "@/pages/user/userPopover";
 import { getfindByTitle2, getResearchListData } from "@/api/getCompositionData";
 // import Bus from '@/utils/eventBus'
 export default {
@@ -703,7 +703,6 @@ export default {
       console.log("加密之后的用户名", dlpwd);
       const prams = {
         username: localStorage.getItem("USERNAME"),
-<<<<<<< HEAD
         password: dlpwd,
       };
       if (localStorage.getItem("USERNAME") === "" || dlpwd === "") {
@@ -711,23 +710,11 @@ export default {
       } else {
         //var url = 'https://www.zhongkeruitong.top/towerImg/cms/user/login?username=' + this.ruleForm1.username + '&password=' + this.ruleForm1.password
         var url = `http://211.86.56.184:443/zihui/Login/login?username=${prams.username}&password=${dlpwd}`;
-=======
-        password: localStorage.getItem("PASSWORD")
-        // password: dlpwd
-      }
-      if (localStorage.getItem("USERNAME") === '' || localStorage.getItem("PASSWORD") === '') {
-      // if (localStorage.getItem("USERNAME") === '' || dlpwd === '') {
-        this.$message.warning('请输入用户名或密码！')
-      } else {
-        //var url = 'https://www.zhongkeruitong.top/towerImg/cms/user/login?username=' + this.ruleForm1.username + '&password=' + this.ruleForm1.password
-        var url = `http://211.86.56.184:443/zihui/Login/login?username=${prams.username}&password=${prams.password}`
->>>>>>> f78944c7fac1a12e6ba6e84f133aa3ff2cd53c79
         // var url = `http://58.119.112.14:11020/cms/login?username=${localStorage.getItem("USERNAME")}&password=${localStorage.getItem("PASSWORD")}`
         this.$axios.post(url).then((res) => {
           console.log("444", res.data);
 
           if (res.data.code === 200) {
-<<<<<<< HEAD
             this.$message.success("登录成功！");
             localStorage.setItem("flag_class", "已登录");
             localStorage.setItem("userId", res.data.userid);
@@ -742,22 +729,6 @@ export default {
             this.username = localStorage.username;
             console.log("登录后的token是", localStorage.getItem("token"));
             this.$router.push("/");
-=======
-            this.$message.success('登录成功！')
-            localStorage.setItem('flag_class', '已登录')
-            localStorage.setItem('userId', res.data.userid)
-            localStorage.setItem('role', res.data.role) // 0是普通  1是管理员
-            localStorage.setItem('name', res.data.username)
-            localStorage.setItem('token', res.data.token)
-            // localStorage.setItem('schoolname', this.ruleForm2.class_name)
-            localStorage.setItem('password', dlpwd)
-            this.loginFlag = 'true'
-            localStorage.setItem('LOGINFLAG', true)
-            this.showDialog = false
-            this.username = localStorage.username
-            console.log('登录后的token是', localStorage.getItem('token'))
-            this.$router.push('/')
->>>>>>> f78944c7fac1a12e6ba6e84f133aa3ff2cd53c79
             // this.$router.push({
             //   path: '/',
             //   query: {
