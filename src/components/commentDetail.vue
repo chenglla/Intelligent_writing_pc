@@ -419,13 +419,13 @@ export default {
 
       }
       intelligentMeasurement2(prames).then((res) => {
-        // this.content = res.data.data.content
-        // this.tag = res.data.data.tags[1]
-        // this.tags = res.data.data.tags
-        //截取成绩，保留小数点后两位
-        // this.tags[4] = this.tags[4].toFixed(2)
-        //console.log('4',this.tags[4])
-        // this.parallel = res.data.data.parallel
+        this.content = res.data.data.content
+        this.tag = res.data.data.tags[1]
+        this.tags = res.data.data.tags
+        // 截取成绩，保留小数点后两位
+        this.tags[4] = this.tags[4].toFixed(2)
+        console.log('4',this.tags[4])
+        this.parallel = res.data.data.parallel
         this.fullscreenLoading = false
       })
     }
