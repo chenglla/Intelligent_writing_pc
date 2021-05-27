@@ -237,10 +237,10 @@ export default {
         }
         this.loading = true
         intelligentMeasurement2(prames).then(respone => {
-          // this.measureData = respone.data.data
-          // this.dialogData = this.measureData.tags
-          // this.tuijianData = respone.data.data.passage
-          // console.log(this.tuijianData)
+          this.measureData = respone.data.data
+          this.dialogData = this.measureData.tags
+          this.tuijianData = respone.data.data.passage
+          console.log(this.tuijianData)
           this.tuijianFlag = true
           this.dialogVisible = true
           this.loading = false
